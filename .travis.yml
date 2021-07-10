@@ -1,0 +1,10 @@
+language: c
+compiler: clang
+script: make valgrind_test_fizzbuzz
+dist: xenial
+addons:
+    apt:
+      packages:
+        - libcmocka-dev
+        - libcmocka0
+        - valgrind
