@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/23jodys/exercise.svg?branch=master)](https://travis-ci.com/23jodys/exercise)
+[![Build Status](https://travis-ci.com/23jodys/exercise.svg?branch=main)](https://travis-ci.com/23jodys/exercise)
 
 Exercises
 =========
