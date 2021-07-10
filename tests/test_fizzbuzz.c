@@ -28,6 +28,7 @@ static void test_div_3(void** state) {
 
 	assert_string_equal(result, expected);
 	sdsfree(result);
+	sdsfree(expected);
 }
 
 /**
@@ -39,6 +40,7 @@ static void test_div_5(void** state) {
 
 	assert_string_equal(result, expected);
 	sdsfree(result);
+	sdsfree(expected);
 }
 
 /**
@@ -50,6 +52,7 @@ static void test_div_15(void** state) {
 
 	assert_string_equal(result, expected);
 	sdsfree(result);
+	sdsfree(expected);
 
 }
 
@@ -62,6 +65,7 @@ static void test_div_30(void** state) {
 
 	assert_string_equal(result, expected);
 	sdsfree(result);
+	sdsfree(expected);
 
 }
 
@@ -73,6 +77,7 @@ static void test_div_29(void** state) {
 	sds result = fizzbuzz(29);
 	assert_string_equal(result, expected);
 	sdsfree(result);
+	sdsfree(expected);
 }
 
 int main(int argc, char* argv[]) {
