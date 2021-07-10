@@ -1,6 +1,6 @@
 language: c
 compiler: clang
-script: make valgrind_test_fizzbuzz
+script: make valgrind_test_fizzbuzz fizz; ./fizz
 dist: xenial
 addons:
     apt:
