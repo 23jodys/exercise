@@ -39,7 +39,7 @@ test: test_fizzbuzz test_rna
 	./test_rna
 
 .PHONY: valgrind
-valgrind: valgrind_test_rna valgring_test_fizzbuzz
+valgrind: valgrind_test_rna valgrind_test_fizzbuzz
 
 valgrind_%: %
 	valgrind --leak-check=full --error-exitcode=1 ./$* 
