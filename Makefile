@@ -56,4 +56,4 @@ docs: $(HEADERS)
 
 .PHONY: clean
 clean:
-	rm -rf *.o *.gcda *.gcno fizz test_fizzbuzz *.dSYM html/ latex/
+	rm -rf *.o *.gcda *.gcno fizz test_rna test_fizzbuzz *.dSYM html/ latex/
