@@ -26,13 +26,20 @@ LDLIBS += $(if $(COVERAGE), --coverage )
 test_fizzbuzz: LDLIBS += -lcmocka
 test_fizzbuzz: fizzbuzz.o test_fizzbuzz.o sds.o
 
-.PHONY: test
-test: test_fizzbuzz
-	./test_fizzbuzz 
-
 fizzbuzz.o: exercise.h sds.o
 
 fizz: fizzbuzz.o sds.o
+
+test_rna: LDLIBS += -lcmocka
+test_rna: rna.o test_rna.o sds.o
+
+.PHONY: test
+test: test_fizzbuzz test_rna
+	./test_fizzbuzz 
+	./test_rna
+
+.PHONY: valgrind
+valgrind: valgrind_test_rna valgring_test_fizzbuzz
 
 valgrind_%: %
 	valgrind --leak-check=full --error-exitcode=1 ./$* 
