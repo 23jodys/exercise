@@ -13,3 +13,13 @@ FizzBuzz outputs all integers from 1 to 100. When a number is divisible by 3, th
 make fizz
 ./fizz
 ```
+
+RNA (Rosalind)
+--------------
+
+Run the test suite to see this example
+
+```
+gmake test_rna
+./test_rna
+```

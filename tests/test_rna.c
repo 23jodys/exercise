@@ -20,6 +20,8 @@ static void test_basic(void** state) {
 
 	input = transcribe_dna_to_rna(input);
 	assert_string_equal(input, expected);
+	printf("Input DNA        : %s\n", input);
+	printf("Translated to RNA: %s\n", expected);
 
 	sdsfree(input);
 	sdsfree(expected);
