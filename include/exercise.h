@@ -16,3 +16,16 @@
  * @returns sds string
  */
 sds fizzbuzz(int number);
+
+
+/**
+ * @brief Transform dna to rna.
+ *
+ * Allowed input is sds style strings. ONLY capital letters are converted.
+ *
+ * Always returns the same input buffer as it modifies in place.
+ *
+ * @param [in] input
+ * @returns sds input
+ */
+sds transcribe_dna_to_rna(sds input);
