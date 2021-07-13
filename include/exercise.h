@@ -4,7 +4,7 @@
 #include <string.h>
 #include "sds.h"
 
-#define NDEBUG 1
+#define NDEBUG 1 
 #include "dbg.h"
 
 /**
@@ -29,3 +29,13 @@ sds fizzbuzz(int number);
  * @returns sds input
  */
 sds transcribe_dna_to_rna(sds input);
+
+/**
+ * @brief Calculate hamming distance of two sds strings
+ *
+ * Allowed input is two sds strings. If dissimilar in length
+ * calculate the distance up to the length of the shorter one.
+ *
+ * Returns the hamming distance between the two strings.
+ */
+int hamming(sds input1, sds input2);
