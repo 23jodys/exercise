@@ -20,6 +20,20 @@ RNA (Rosalind)
 Run the test suite to see this example
 
 ```
-gmake test_rna
+make test_rna
 ./test_rna
+```
+
+HAMM (Rosalind)
+---------------
+
+http://rosalind.info/problems/hamm/
+
+hamm.c
+
+Run the test suite to see the example. Some additional test cases are provided in test_hamm.c
+
+```
+make test_hamm
+./test_hamm
 ```

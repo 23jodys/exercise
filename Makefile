@@ -33,13 +33,17 @@ fizz: fizzbuzz.o sds.o
 test_rna: LDLIBS += -lcmocka
 test_rna: rna.o test_rna.o sds.o
 
+test_hamm: LDLIBS += -lcmocka
+test_hamm: hamm.o test_hamm.o sds.o
+
 .PHONY: test
-test: test_fizzbuzz test_rna
+test: test_fizzbuzz test_rna test_hamm
 	./test_fizzbuzz 
 	./test_rna
+	./test_hamm
 
 .PHONY: valgrind
-valgrind: valgrind_test_rna valgrind_test_fizzbuzz
+valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm
 
 valgrind_%: %
 	valgrind --leak-check=full --error-exitcode=1 ./$* 
@@ -56,4 +60,4 @@ docs: $(HEADERS)
 
 .PHONY: clean
 clean:
-	rm -rf *.o *.gcda *.gcno fizz test_rna test_fizzbuzz *.dSYM html/ latex/
+	rm -rf *.o *.gcda *.gcno fizz test_hamm test_rna test_fizzbuzz *.dSYM html/ latex/
