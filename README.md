@@ -37,3 +37,15 @@ Run the test suite to see the example. Some additional test cases are provided i
 make test_hamm
 ./test_hamm
 ```
+
+REVC (Rosalind)
+---------------
+
+http://rosalind.info/problems/revc/
+
+Run the test suite to see the example. Some additional boundary test cases are provided in test_revc.c
+
+```
+make test_revc
+./test_revc
+```
