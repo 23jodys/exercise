@@ -7,7 +7,6 @@ sds revc(sds input) {
 	char buffer[1000];
 	for (int i = 0; i < length; i++) {
 		char new;
-
 		switch(input[i]) {
 			case 'A':
 				new = 'T';
@@ -24,14 +23,10 @@ sds revc(sds input) {
 			default:
 				new = input[i];
 		}
-		debug("evaluating position %d, %c -> %c", i, input[i], new);
-		buffer[length - i] = new;
+		buffer[length - 1 - i] = new;
 	}
 
-	sds output = sdsnewlen(buffer, length + 1);
-
-	debug("input : %s", input);
-	debug("output: %s", output);
+	sds output = sdsnewlen(buffer, length);
 
 	return output;
 }
