@@ -2,7 +2,10 @@
 
 sds revc(sds input) {
 	int length = sdslen(input);
-	/* TODO: assert length < 1000 */
+	debug("input string length %d", length);
+	if (length > 1000) {
+		return NULL;
+	}
 
 	char buffer[1000];
 	for (int i = 0; i < length; i++) {
