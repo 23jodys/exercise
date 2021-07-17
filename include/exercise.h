@@ -49,3 +49,31 @@ int hamming(sds input1, sds input2);
  * @returns sds OR NULL
  */
 sds revc(sds input);
+
+/**
+ * @brief Return start indexes for a substring contained in a string
+ *
+ * @param [in] substring
+ * @param [in] string to search in
+ * @returns array of indexes
+ */
+
+/**
+ * @brief Structure for returning results from subs
+ */
+typedef struct SubsResult {
+	int len; /**< @param the number of substrings found */;
+	int size; 
+	int substrings[]; /**< @param the array of results, dynamically allocated */
+	char* error; /**< Text error message */;
+} SubsResult;
+
+/** 
+ * @brief Allocate structure for substring results
+ */
+SubsResult* subs_create(void);
+
+/** @brief Free structure for substring results
+ */
+bool subs_free(SubsResult** result);
+
