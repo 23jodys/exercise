@@ -33,6 +33,7 @@ static void test_basic(void** state) {
 
 	sds debug_string = subs_sprintf(observed);
 	debug("Substrings are %s", debug_string);
+	sdsfree(debug_string);
 
 	subs_free(&observed);
 	debug("Freed observed");
@@ -49,6 +50,7 @@ static void test_empty_result_sprintf(void** state) {
 	assert_string_equal(debug_string, "");
 
 	subs_free(&observed);
+	sdsfree(debug_string);
 }
 
 /**
@@ -86,7 +88,8 @@ static void test_find_basic(void** state) {
 
 	printf("String             : %s\n", input_string);
 	printf("Search String      : %s\n", input_substring);
-	printf("Substring locations: %s\n", subs_sprintf(observed));
+	sds locations = subs_sprintf(observed);
+	printf("Substring locations: %s\n", locations);
 
 
 	for (int i = 0; i < 3; i++) {
@@ -95,6 +98,9 @@ static void test_find_basic(void** state) {
 	}
 
 	subs_free(&observed);
+	sdsfree(input_string);
+	sdsfree(input_substring);
+	sdsfree(locations);
 
 }
 
@@ -110,6 +116,8 @@ static void test_same_length_no_match(void** state) {
 
 	assert_int_equal(0, observed->len);
 	subs_free(&observed);
+	sdsfree(input_string);
+	sdsfree(input_substring);
 	
 }
 
@@ -128,6 +136,8 @@ static void test_same_length_match(void** state) {
 	debug("Expected: %d, Observed: %d", 0, observed->substrings[0]);
 	subs_free(&observed);
 	
+	sdsfree(input_string);
+	sdsfree(input_substring);
 }
 
 /**
@@ -145,6 +155,8 @@ static void test_rightmost_substring_match(void** state) {
 	debug("Expected: %d, Observed: %d", 0, observed->substrings[0]);
 	subs_free(&observed);
 	
+	sdsfree(input_string);
+	sdsfree(input_substring);
 }
 
 int main(int argc, char* argv[]) {
