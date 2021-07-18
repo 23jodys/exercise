@@ -51,7 +51,7 @@ test: test_fizzbuzz test_rna test_hamm test_revc test_subs
 	./test_subs
 
 .PHONY: valgrind
-valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm valgrind_test_revc
+valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm valgrind_test_revc valgrind_test_subs
 
 valgrind_%: %
 	valgrind --leak-check=full --error-exitcode=1 ./$* 
