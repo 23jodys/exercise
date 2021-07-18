@@ -39,13 +39,16 @@ test_hamm: hamm.o test_hamm.o sds.o
 test_revc: LDLIBS += -lcmocka
 test_revc: revc.o test_revc.o sds.o
 
+test_subs: LDLIBS += -lcmocka
+test_subs: subs.o test_subs.o sds.o
 
 .PHONY: test
-test: test_fizzbuzz test_rna test_hamm test_revc
+test: test_fizzbuzz test_rna test_hamm test_revc test_subs
 	./test_fizzbuzz
 	./test_rna
 	./test_hamm
 	./test_revc
+	./test_subs
 
 .PHONY: valgrind
 valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm valgrind_test_revc
