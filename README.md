@@ -49,3 +49,17 @@ Run the test suite to see the example. Some additional boundary test cases are p
 make test_revc
 ./test_revc
 ```
+
+SUBS (Rosalind)
+---------------
+
+http://rosalind.info/problems/subs/
+
+Notes: 1 based indexing.
+
+Run the test suite to see the example. Some additional, but minimal testing is performed in test_subs.c
+
+```
+make test_subs
+./test_subs
+```

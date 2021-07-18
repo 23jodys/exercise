@@ -4,3 +4,5 @@ fizzbuzz
 test_fizzbuzz
 test_rna
 test_hamm
+test_subs
+test_revc
