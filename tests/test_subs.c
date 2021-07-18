@@ -33,6 +33,7 @@ static void test_basic(void** state) {
 
 	sds debug_string = subs_sprintf(observed);
 	debug("Substrings are %s", debug_string);
+	sdsfree(debug_string);
 
 	subs_free(&observed);
 	debug("Freed observed");
@@ -87,7 +88,8 @@ static void test_find_basic(void** state) {
 
 	printf("String             : %s\n", input_string);
 	printf("Search String      : %s\n", input_substring);
-	printf("Substring locations: %s\n", subs_sprintf(observed));
+	sds locations = subs_sprintf(observed);
+	printf("Substring locations: %s\n", locations);
 
 
 	for (int i = 0; i < 3; i++) {
@@ -98,6 +100,7 @@ static void test_find_basic(void** state) {
 	subs_free(&observed);
 	sdsfree(input_string);
 	sdsfree(input_substring);
+	sdsfree(locations);
 
 }
 
