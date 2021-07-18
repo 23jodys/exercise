@@ -152,6 +152,8 @@ static void test_rightmost_substring_match(void** state) {
 	debug("Expected: %d, Observed: %d", 0, observed->substrings[0]);
 	subs_free(&observed);
 	
+	sdsfree(input_string);
+	sdsfree(input_substring);
 }
 
 int main(int argc, char* argv[]) {
