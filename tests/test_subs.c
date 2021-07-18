@@ -49,6 +49,7 @@ static void test_empty_result_sprintf(void** state) {
 	assert_string_equal(debug_string, "");
 
 	subs_free(&observed);
+	sdsfree(debug_string);
 }
 
 /**
@@ -95,6 +96,8 @@ static void test_find_basic(void** state) {
 	}
 
 	subs_free(&observed);
+	sdsfree(input_string);
+	sdsfree(input_substring);
 
 }
 
@@ -110,6 +113,8 @@ static void test_same_length_no_match(void** state) {
 
 	assert_int_equal(0, observed->len);
 	subs_free(&observed);
+	sdsfree(input_string);
+	sdsfree(input_substring);
 	
 }
 
@@ -128,6 +133,8 @@ static void test_same_length_match(void** state) {
 	debug("Expected: %d, Observed: %d", 0, observed->substrings[0]);
 	subs_free(&observed);
 	
+	sdsfree(input_string);
+	sdsfree(input_substring);
 }
 
 /**
