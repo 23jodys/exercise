@@ -96,3 +96,5 @@ SubsResult* subs_find(
 		sds string, /**< @param string to search in */
 		sds substring /**< @param string to find */
 		);
+
+sds prot(sds input);
