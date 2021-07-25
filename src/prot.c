@@ -1,9 +1,17 @@
 #include "exercise.h"
-#include <assert.h>
+
+/*
+ * The naive approach would be substring matching every possible codon. A less
+ * naive approach might be regex (but I'm trying not to use to many libraries.
+ * So this model is that we have a three level tree structure. Each path through
+ * the tree is a different codon string. The bottom most vertices contain the 
+ * protein character.
+ *
+ * There is a fair amount of stupid stuff going on here to translate a char into
+ * something we can index with.
+ */
 
 typedef enum base { baseA, baseU, baseC, baseG, baseNone } base; 
-
-
 
 struct {
 	base base;
