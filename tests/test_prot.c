@@ -102,7 +102,6 @@ static void test_lower_case_rna(void** state) {
 	assert_null(observed);
 
 	sdsfree(input);
-	
 }
 
 int main(int argc, char* argv[]) {

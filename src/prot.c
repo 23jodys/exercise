@@ -107,6 +107,7 @@ sds prot(sds input) {
 		debug("input[i+0] = %c", input[i+2]);
 
 		if (x == baseNone || y == baseNone || z == baseNone) {
+			sdsfree(result);
 			return NULL;
 		}
 		char protein = root.nodes[x]->nodes[y]->nodes[z]->value;
