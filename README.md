@@ -63,3 +63,16 @@ Run the test suite to see the example. Some additional, but minimal testing is p
 make test_subs
 ./test_subs
 ```
+
+PROT (Rosalind)
+---------------
+
+http://rosalind.info/problems/prot/
+
+
+Run the test suite to see the example. Some additional, but minimal testing is performed in test_prot.c
+
+```
+make test_prot
+./test_prot
+```

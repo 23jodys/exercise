@@ -1,11 +1,23 @@
 #include "exercise.h"
 #include <assert.h>
 
+typedef enum base { baseA, baseU, baseC, baseG, baseNone } base; 
+
+
+
+struct {
+	base base;
+	char upper;
+} base_lookup[] = {
+	[baseA].base = baseA, [baseA].upper = 'A',
+	[baseU].base = baseU, [baseU].upper = 'U',
+	[baseG].base = baseG, [baseG].upper = 'G',
+	[baseC].base = baseC, [baseC].upper = 'C'
+};
+
+
 typedef struct Node {
-	struct Node* baseA;
-	struct Node* baseU;
-	struct Node* baseC;
-	struct Node* baseG;
+	struct Node* nodes[4];
 	char value;
 } Node;
 
@@ -32,42 +44,79 @@ struct Node Y = {.value = 'Y'};
 struct Node Stop = {.value = '0'};
 
 Node root = {
-	.baseG = &((Node)
+	.nodes[baseG] = &((Node)
 		{
-			.baseG = &((Node) {.baseG = &G, .baseA = &G, .baseC = &G, .baseU = &G}),
-			.baseA = &((Node) {.baseG = &E, .baseA = &E, .baseC = &D, .baseU = &D}),
-			.baseC = &((Node) {.baseG = &A, .baseA = &A, .baseC = &A, .baseU = &A}),
-			.baseU = &((Node) {.baseG = &V, .baseA = &V, .baseC = &V, .baseU = &V}),
+			.nodes[baseG] = &((Node) {.nodes[baseG] = &G, .nodes[baseA] = &G, .nodes[baseU] = &G, .nodes[baseC] = &G}),
+			.nodes[baseA] = &((Node) {.nodes[baseG] = &E, .nodes[baseA] = &E, .nodes[baseC] = &D, .nodes[baseU] = &D}),
+			.nodes[baseC] = &((Node) {.nodes[baseG] = &A, .nodes[baseA] = &A, .nodes[baseC] = &A, .nodes[baseU] = &A}),
+			.nodes[baseU] = &((Node) {.nodes[baseG] = &V, .nodes[baseA] = &V, .nodes[baseC] = &V, .nodes[baseU] = &V}),
 		}
 	),
-	.baseA = &((Node)
+	.nodes[baseA] = &((Node)
 		{
-			.baseG = &((Node) {.baseG = &R, .baseA = &R, .baseC = &S, .baseU = &S}),
-			.baseA = &((Node) {.baseG = &K, .baseA = &K, .baseC = &N, .baseU = &N}),
-			.baseC = &((Node) {.baseG = &T, .baseA = &T, .baseC = &T, .baseU = &T}),
-			.baseU = &((Node) {.baseG = &M, .baseA = &I, .baseC = &I, .baseU = &I}),
+			.nodes[baseG] = &((Node) {.nodes[baseG] = &R, .nodes[baseA] = &R, .nodes[baseC] = &S, .nodes[baseU] = &S}),
+			.nodes[baseA] = &((Node) {.nodes[baseG] = &K, .nodes[baseA] = &K, .nodes[baseC] = &N, .nodes[baseU] = &N}),
+			.nodes[baseC] = &((Node) {.nodes[baseG] = &T, .nodes[baseA] = &T, .nodes[baseC] = &T, .nodes[baseU] = &T}),
+			.nodes[baseU] = &((Node) {.nodes[baseG] = &M, .nodes[baseA] = &I, .nodes[baseC] = &I, .nodes[baseU] = &I}),
 		}
 	),
-	.baseC = &((Node)
+	.nodes[baseC] = &((Node)
 		{
-			.baseG = &((Node) {.baseA = &R, .baseU = &R, .baseC = &R, .baseG = &R}),
-			.baseA = &((Node) {.baseA = &Q, .baseU = &H, .baseC = &H, .baseG = &Q}),
-			.baseC = &((Node) {.baseG = &P, .baseA = &P, .baseC = &P, .baseU = &P}),
-			.baseU = &((Node) {.baseG = &L, .baseA = &L, .baseC = &L, .baseU = &L}),
+			.nodes[baseG] = &((Node) {.nodes[baseA] = &R, .nodes[baseU] = &R, .nodes[baseC] = &R, .nodes[baseG] = &R}),
+			.nodes[baseA] = &((Node) {.nodes[baseA] = &Q, .nodes[baseU] = &H, .nodes[baseC] = &H, .nodes[baseG] = &Q}),
+			.nodes[baseC] = &((Node) {.nodes[baseG] = &P, .nodes[baseA] = &P, .nodes[baseC] = &P, .nodes[baseU] = &P}),
+			.nodes[baseU] = &((Node) {.nodes[baseG] = &L, .nodes[baseA] = &L, .nodes[baseC] = &L, .nodes[baseU] = &L}),
 		}
 	),
-	.baseU = &((Node)
+	.nodes[baseU] = &((Node)
 		{
-			.baseG = &((Node) {.baseG = &W, .baseA = &Stop, .baseC = &C, .baseU = &C}),
-			.baseA = &((Node) {.baseG = &Stop, .baseA = &Stop, .baseC = &Y, .baseU = &Y}),
-			.baseC = &((Node) {.baseG = &S, .baseA = &S, .baseC = &S, .baseU = &S}),
-			.baseU = &((Node) {.baseG = &L, .baseA = &L, .baseC = &F, .baseU = &F}),
+			.nodes[baseG] = &((Node) {.nodes[baseG] = &W, .nodes[baseA] = &Stop, .nodes[baseC] = &C, .nodes[baseU] = &C}),
+			.nodes[baseA] = &((Node) {.nodes[baseG] = &Stop, .nodes[baseA] = &Stop, .nodes[baseC] = &Y, .nodes[baseU] = &Y}),
+			.nodes[baseC] = &((Node) {.nodes[baseG] = &S, .nodes[baseA] = &S, .nodes[baseC] = &S, .nodes[baseU] = &S}),
+			.nodes[baseU] = &((Node) {.nodes[baseG] = &L, .nodes[baseA] = &L, .nodes[baseC] = &F, .nodes[baseU] = &F}),
 		}
 	),
 };
 
+/** 
+ * @brief Private function for performing the lookup converting char to the enum
+ */
+base lu(char input) {
+	base value = baseNone;
+	for (int j = 0; j < 4; j++) {
+		if (input == base_lookup[j].upper) {
+			value = base_lookup[j].base;
+		}
+	}
+	return value;
+}
+
 sds prot(sds input) {
-	assert(sdslen(input) % 3 == 0);
+	if (sdslen(input) % 3 != 0) {
+		return NULL;
+	}
+	sds result = sdsempty();
+	
 	for (int i = 0; i < sdslen(input); i += 3) {
-		printf("char: %c\n", root.base
+		debug("i = %d, looking at substring: %.3s", i, &(input[i]));
+		base x = lu(input[i+0]);
+		debug("input[i+0] = %c", input[i+0]);
+		base y = lu(input[i+1]);
+		debug("input[i+1] = %c", input[i+1]);
+		base z = lu(input[i+2]);
+		debug("input[i+0] = %c", input[i+2]);
+
+		if (x == baseNone || y == baseNone || z == baseNone) {
+			return NULL;
+		}
+		char protein = root.nodes[x]->nodes[y]->nodes[z]->value;
+		if (protein != '0') {
+			debug("catting '%c' to result %s", protein, result);
+			result = sdscatlen(result, &(protein), 1);
+		}
+	}
+
+	debug("result: %s", result);
+
+	return result;
 }

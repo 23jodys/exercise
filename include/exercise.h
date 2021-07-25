@@ -4,7 +4,7 @@
 #include <string.h>
 #include "sds.h"
 
-#define NDEBUG 1 
+//#define NDEBUG 1 
 #include "dbg.h"
 
 /**
@@ -97,4 +97,9 @@ SubsResult* subs_find(
 		sds substring /**< @param string to find */
 		);
 
+/** @brief convert a sds string of uppercase RNA bases to proteins. The sds string length must be divisible by 3.
+ *
+ * @param input sds string of RNA input
+ * @returns sds protein string
+ */
 sds prot(sds input);
