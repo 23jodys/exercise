@@ -103,3 +103,4 @@ SubsResult* subs_find(
  * @returns sds protein string
  */
 sds prot(sds input);
+
