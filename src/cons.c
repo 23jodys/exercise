@@ -1,11 +1,27 @@
 #include "cons.h"
 
-/*
-FastaStrings* fasta_file_to_strings() {
+FastaStrings* fasta_file_to_strings(FILE* stream) {
+	size_t bufsize = 1000;
+	char* buffer = NULL;
+	ssize_t lineSize = 0; 
 	
+	int line_counter = 0;
+	while((lineSize = getline(&buffer, &bufsize, stream)) != -1) {
+		line_counter++;
+		if ((line_counter % 2 == 0) && (buffer[0] == '>')) {
+			/* name line */
 
+		} else if ((line_counter % 2 == 1) && (buffer[0] != '>')) {
+			/* sequence line */
+
+		} else {
+			/* wtf, give up now because wth is this even? */
+
+		}
+	}
+
+	free(buffer);
 }
-*/
 
 FastaStrings* FastaStrings_init() {
 	FastaStrings* _result = malloc(sizeof(FastaStrings));
