@@ -7,14 +7,18 @@ FastaStrings* fasta_file_to_strings(FILE* stream, ssize_t (*getline)(char ** res
 	int line_counter = 0;
 
 	FastaStrings* _result = FastaStrings_init();
-	printf("here %d\n", __LINE__);
+	log_info("fasta_file_to_strings");
+	if (getline == NULL) {
+		log_info("using default getline");
+	}
 	while((lineSize = getline(&buffer, &bufsize, stream)) != -1) {
-		printf("here %d\n", __LINE__);
 		line_counter++;
-		if ((line_counter % 2 == 0) && (buffer[0] == '>')) {
+		log_info("fasta_file_to_strings, string %s, line_counter %d",
+				buffer, line_counter);
+		if ((line_counter % 2 == 1) && (buffer[0] == '>')) {
 			/* name line */
 
-		} else if ((line_counter % 2 == 1) && (buffer[0] != '>')) {
+		} else if ((line_counter % 2 == 0) && (buffer[0] != '>')) {
 			/* sequence line */
 			FastaStrings_add(_result, sdsnew(buffer));
 		} else {
