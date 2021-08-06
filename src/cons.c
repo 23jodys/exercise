@@ -1,32 +1,44 @@
 #include "cons.h"
 
-FastaStrings* fasta_file_to_strings(FILE* stream) {
+FastaStrings* fasta_file_to_strings(FILE* stream, ssize_t (*getline)(char ** restrict, size_t * restrict, FILE * restrict)) {
 	size_t bufsize = 1000;
 	char* buffer = NULL;
 	ssize_t lineSize = 0; 
-	
 	int line_counter = 0;
+
+	FastaStrings* _result = FastaStrings_init();
+	printf("here %d\n", __LINE__);
 	while((lineSize = getline(&buffer, &bufsize, stream)) != -1) {
+		printf("here %d\n", __LINE__);
 		line_counter++;
 		if ((line_counter % 2 == 0) && (buffer[0] == '>')) {
 			/* name line */
 
 		} else if ((line_counter % 2 == 1) && (buffer[0] != '>')) {
 			/* sequence line */
-
+			FastaStrings_add(_result, sdsnew(buffer));
 		} else {
 			/* wtf, give up now because wth is this even? */
-
+			_result->error = sdscatprintf(
+				_result->error,
+				"invalid FASTA file at line %d",
+				line_counter
+			);
+			_result->strings = NULL;
+			break;
 		}
 	}
 
 	free(buffer);
+
+	return _result;
 }
 
 FastaStrings* FastaStrings_init() {
 	FastaStrings* _result = malloc(sizeof(FastaStrings));
 	_result->len = 0;
 	_result->_size = 0;
+	_result->error = sdsempty();
 	_result->strings = NULL;
 	return _result;
 }
@@ -54,6 +66,8 @@ void FastaStrings_free(FastaStrings** fasta_strings) {
 	}
 	free((*(*fasta_strings)).strings);
 	(*(*fasta_strings)).strings = NULL;
+
+	sdsfree((*fasta_strings)->error);
 
 	free(*fasta_strings);
 	*fasta_strings = NULL;
