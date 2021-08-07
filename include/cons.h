@@ -14,6 +14,20 @@ typedef struct FastaStrings {
 	sds* strings;
 } FastaStrings;
 
+typedef struct Consensus {
+	sds consensus;
+	char* error;
+	ConsensusChar* profile;
+} Consensus;
+
+typedef struct ConsensusChar {
+	int A;
+	int C;
+	int G;
+	int T;
+} ConsensusChar;
+
+void FastaStrings_Consensus(FastaStrings* strings, Consensus* consensus); 
 FastaStrings* FastaStrings_init(void);
 FastaStrings* FastaStrings_add(FastaStrings* strings, sds string);
 void FastaStrings_free(FastaStrings** fasta_strings);
