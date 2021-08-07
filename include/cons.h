@@ -14,12 +14,6 @@ typedef struct FastaStrings {
 	sds* strings;
 } FastaStrings;
 
-typedef struct Consensus {
-	sds consensus;
-	char* error;
-	ConsensusChar* profile;
-} Consensus;
-
 typedef struct ConsensusChar {
 	int A;
 	int C;
@@ -27,8 +21,19 @@ typedef struct ConsensusChar {
 	int T;
 } ConsensusChar;
 
-void FastaStrings_Consensus(FastaStrings* strings, Consensus* consensus); 
+
+typedef struct Consensus {
+	sds consensus;
+	char* error;
+	int profile_len;
+	ConsensusChar* profile[];
+} Consensus;
+
+char* ConsensusChar_calculate(ConsensusChar* cchar); 
+Consensus* Consensus_fromFastaStrings(FastaStrings* strings); 
 FastaStrings* FastaStrings_init(void);
 FastaStrings* FastaStrings_add(FastaStrings* strings, sds string);
 void FastaStrings_free(FastaStrings** fasta_strings);
+void Consensus_free(Consensus** consensus); 
 FastaStrings* fasta_file_to_strings(FILE* stream, ssize_t (*getline)(char ** restrict, size_t * restrict, FILE * restrict)); 
+bool FastaStrings_check_equal_length(FastaStrings* strings); 
