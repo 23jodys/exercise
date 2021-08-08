@@ -29,11 +29,18 @@ typedef struct Consensus {
 	ConsensusChar* profile[];
 } Consensus;
 
+ConsensusChar* ConsensusChar_init(); 
+void ConsensusChar_free(ConsensusChar** c); 
 char* ConsensusChar_calculate(ConsensusChar* cchar); 
+
+Consensus* Consensus_init(void); 
+sds Consensus_sprint(Consensus*);
+void Consensus_free(Consensus** consensus); 
 Consensus* Consensus_fromFastaStrings(FastaStrings* strings); 
+
 FastaStrings* FastaStrings_init(void);
 FastaStrings* FastaStrings_add(FastaStrings* strings, sds string);
 void FastaStrings_free(FastaStrings** fasta_strings);
-void Consensus_free(Consensus** consensus); 
-FastaStrings* fasta_file_to_strings(FILE* stream, ssize_t (*getline)(char ** restrict, size_t * restrict, FILE * restrict)); 
 bool FastaStrings_check_equal_length(FastaStrings* strings); 
+
+FastaStrings* fasta_file_to_strings(FILE* stream, ssize_t (*getline)(char ** restrict, size_t * restrict, FILE * restrict)); 

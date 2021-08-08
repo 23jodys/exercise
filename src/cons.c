@@ -38,11 +38,23 @@ FastaStrings* fasta_file_to_strings(FILE* stream, ssize_t (*getline)(char ** res
 	return _result;
 }
 
-Consensus* Consensus_fromFastaStrings(FastaStrings* strings) {
-	check(strings, "empty FastaStrings");
+ConsensusChar* ConsensusChar_init() {
+	ConsensusChar* consensus_char = malloc(sizeof(ConsensusChar));
+	consensus_char->A = 0;
+	consensus_char->T = 0;
+	consensus_char->C = 0;
+	consensus_char->G = 0;
+	return consensus_char;
+}
 
-	Consensus* result = malloc(sizeof(Consensus));
-	result->profile_len = 0;
+void ConsensusChar_free(ConsensusChar** c) {
+	free(*c);
+	*c = NULL;
+}
+
+Consensus* Consensus_fromFastaStrings(FastaStrings* strings) {
+	/* check(strings, "empty FastaStrings");*/
+	Consensus* result = Consensus_init();
 	check_mem(result);
 
 	if (!FastaStrings_check_equal_length(strings)) {
@@ -57,28 +69,30 @@ Consensus* Consensus_fromFastaStrings(FastaStrings* strings) {
 
 	result->consensus = sdsempty();
 	for (int i = 0; i < sdslen(strings->strings[0]); i++) {
-		ConsensusChar* consensus_char = malloc(sizeof(ConsensusChar));
+		ConsensusChar* consensus_char = ConsensusChar_init();
 		debug("Created new ConsensusChar for i = %d", i);
 		for (int j = 0; j < strings->len; j++) {
 			if (strings->strings[j][i] == 'A') {
-				debug("Found A at width %d, string %d", i, j);
 				consensus_char->A++;
+				debug("Found A at width %d, string %d, c->A %d", i, j, consensus_char->A);
 			} else if (strings->strings[j][i] == 'C') {
-				debug("Found C at width %d, string %d", i, j);
 				consensus_char->C++;
+				debug("Found C at width %d, string %d, c->C %d", i, j, consensus_char->C);
 			} else if (strings->strings[j][i] == 'G') {
-				debug("Found G at width %d, string %d", i, j);
 				consensus_char->G++;
+				debug("Found G at width %d, string %d, c->G %d", i, j, consensus_char->G);
 			} else if (strings->strings[j][i] == 'T') {
-				debug("Found T at width %d, string %d", i, j);
 				consensus_char->T++;
+				debug("Found T at width %d, string %d, c->T %d", i, j, consensus_char->T);
 			}
 		}
 		result->profile_len++;
 		debug("result->profile_len %d", result->profile_len);
 		result->profile[i] = consensus_char;
 		debug("result->profile[%d] set to new consensus char", i);
-		result->consensus = sdscatlen(result->consensus, ConsensusChar_calculate(consensus_char), 1);
+		char* c = ConsensusChar_calculate(consensus_char);
+		result->consensus = sdscatlen(result->consensus, c , 1);
+		debug("Consenus at width %d is '%s'", i, c);
 	}
 	return result;
 error:
@@ -112,12 +126,46 @@ char* ConsensusChar_calculate(ConsensusChar* cchar) {
 	return result;
 }
 
+sds Consensus_sprint(Consensus* c) {
+
+	sds line0 = sdsdup(c->consensus);
+	sds line1 = sdsnew("A: ");
+	sds line2 = sdsnew("C: ");
+	sds line3 = sdsnew("G: ");
+	sds line4 = sdsnew("T: ");
+
+	for (int i = 0; i < c->profile_len; i++) {
+		line1 = sdscatprintf(line1, "%d ", c->profile[i]->A);
+		line2 = sdscatprintf(line2, "%d ", c->profile[i]->C);
+		line3 = sdscatprintf(line3, "%d ", c->profile[i]->G);
+		line4 = sdscatprintf(line4, "%d ", c->profile[i]->T);
+	}
+	sds lines[5] = {line0, line1, line2, line3, line4};
+
+	sds result = sdsjoinsds(lines, 5, "\n", 1);
+	result = sdscat(result, "\n");
+
+	sdsfree(line0);
+	sdsfree(line1);
+	sdsfree(line2);
+	sdsfree(line3);
+	sdsfree(line4);
+
+	return result;
+}
+
+Consensus* Consensus_init(void) {
+	Consensus* result = malloc(sizeof(Consensus));
+	result->profile_len = 0;
+	return result;
+}
 
 void Consensus_free(Consensus** consensus) {
 	for (int i = 0; i < (*consensus)->profile_len; i++) {
-		free((*consensus)->profile[i]);
+		ConsensusChar_free(&((*consensus)->profile[i]));
 	}
 
+	sdsfree((*consensus)->consensus);
 
 	free(*consensus);
 	*consensus= NULL;
