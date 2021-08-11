@@ -48,8 +48,12 @@ test_prot: prot.o test_prot.o sds.o
 test_cons: LDLIBS += -lcmocka
 test_cons: cons.o test_cons.o sds.o
 
+test_libfasta: LDLIBS += -lcmocka
+test_libfasta: libfasta.o test_libfasta.o sds.o
+
+
 .PHONY: test
-test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons
+test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta
 	./test_fizzbuzz
 	./test_rna
 	./test_hamm
@@ -57,9 +61,10 @@ test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons
 	./test_subs
 	./test_prot
 	./test_cons
+	./test_libfasta
 
 .PHONY: valgrind
-valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm valgrind_test_revc valgrind_test_subs valgrind_test_prot valgrind_test_cons
+valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm valgrind_test_revc valgrind_test_subs valgrind_test_prot valgrind_test_cons valgrind_test_libfasta
 
 valgrind_%: %
 	valgrind --leak-check=full --error-exitcode=1 ./$* 

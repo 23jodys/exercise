@@ -26,7 +26,8 @@ typedef struct Consensus {
 	sds consensus;
 	char* error;
 	int profile_len;
-	ConsensusChar* profile[];
+	int _size;
+	ConsensusChar** profile;
 } Consensus;
 
 ConsensusChar* ConsensusChar_init(); 
@@ -36,6 +37,7 @@ char* ConsensusChar_calculate(ConsensusChar* cchar);
 Consensus* Consensus_init(void); 
 sds Consensus_sprint(Consensus*);
 void Consensus_free(Consensus** consensus); 
+Consensus* Consensus_add_ConsensusChar(Consensus* c, ConsensusChar* ch);
 Consensus* Consensus_fromFastaStrings(FastaStrings* strings); 
 
 FastaStrings* FastaStrings_init(void);

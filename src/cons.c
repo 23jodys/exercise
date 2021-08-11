@@ -53,7 +53,8 @@ void ConsensusChar_free(ConsensusChar** c) {
 }
 
 Consensus* Consensus_fromFastaStrings(FastaStrings* strings) {
-	/* check(strings, "empty FastaStrings");*/
+	check(strings, "empty FastaStrings");
+
 	Consensus* result = Consensus_init();
 	check_mem(result);
 
@@ -68,9 +69,11 @@ Consensus* Consensus_fromFastaStrings(FastaStrings* strings) {
 	);
 
 	result->consensus = sdsempty();
+	/* Loop on the "width" of the strings with index i*/
 	for (int i = 0; i < sdslen(strings->strings[0]); i++) {
 		ConsensusChar* consensus_char = ConsensusChar_init();
 		debug("Created new ConsensusChar for i = %d", i);
+		/* Loop on the "height" of strings with index j*/
 		for (int j = 0; j < strings->len; j++) {
 			if (strings->strings[j][i] == 'A') {
 				consensus_char->A++;
@@ -86,10 +89,13 @@ Consensus* Consensus_fromFastaStrings(FastaStrings* strings) {
 				debug("Found T at width %d, string %d, c->T %d", i, j, consensus_char->T);
 			}
 		}
-		result->profile_len++;
-		debug("result->profile_len %d", result->profile_len);
-		result->profile[i] = consensus_char;
-		debug("result->profile[%d] set to new consensus char", i);
+		//result->profile_len++;
+		//debug("result->profile_len %d", result->profile_len);
+
+		//result->profile[i] = consensus_char;
+		//debug("result->profile[%d] set to new consensus char", i);
+		result = Consensus_add_ConsensusChar(result, consensus_char);
+
 		char* c = ConsensusChar_calculate(consensus_char);
 		result->consensus = sdscatlen(result->consensus, c , 1);
 		debug("Consenus at width %d is '%s'", i, c);
@@ -155,8 +161,9 @@ sds Consensus_sprint(Consensus* c) {
 }
 
 Consensus* Consensus_init(void) {
-	Consensus* result = malloc(sizeof(Consensus));
+	Consensus* result = malloc(sizeof(struct Consensus));
 	result->profile_len = 0;
+	result->_size = 0;
 	return result;
 }
 
@@ -166,9 +173,20 @@ void Consensus_free(Consensus** consensus) {
 	}
 
 	sdsfree((*consensus)->consensus);
+	(*consensus)->consensus = NULL;
 
 	free(*consensus);
 	*consensus= NULL;
+}
+
+Consensus* Consensus_add_ConsensusChar(Consensus* c, ConsensusChar* ch) {
+	if (c->profile_len == c->_size) {
+		c->_size = (2 * c->_size) + 1;
+		c->profile = realloc(c->profile, c->_size * sizeof(ConsensusChar*));
+	}
+	c->profile[c->profile_len] = ch;
+	c->profile_len++;
+	return c;
 }
 
 bool FastaStrings_check_equal_length(FastaStrings* strings)  {
