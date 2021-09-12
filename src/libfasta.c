@@ -52,3 +52,61 @@ void FastaStrings_free(FastaStrings** fasta_strings) {
 	debug("Freed FastaStrings at %p", *fasta_strings);
 	*fasta_strings = NULL;
 }
+
+FastaStrings* FastaStrings_fromFile(FILE* stream, ssize_t (*getline)(char ** restrict, size_t * restrict, FILE * restrict)) {
+	size_t bufsize = 1000; //susp
+	char* buffer = NULL;
+	ssize_t lineSize = 0; 
+	int line_counter = 0;
+
+	FastaStrings* _result = FastaStrings_init();
+
+	if (getline == NULL) {
+		log_info("using default getline");
+	}
+
+	bool in_sequence = false;
+
+	sds sequence_buffer = sdsempty();
+	sds name = sdsempty();
+	sds sequence = sdsempty();
+
+	while((lineSize = getline(&buffer, &bufsize, stream)) != -1) {
+		line_counter++;
+		log_info(
+			"fasta_file_to_strings, string %s, line_counter %d",
+			buffer,
+			line_counter
+		);
+
+		if (buffer[0] == '>') {
+			/* name/description/comment line */
+			if (in_sequence) {
+				/* starting a new description/sequence, store current*/
+				FastaStrings_add(_result, buffer , name);	
+				debug("Set name to '%s'", buffer); 
+				sequence = "\0";
+				debug("Set sequence to '%s'", sequence);
+				name = "\0";
+				debug("Set name to '%s'", name);
+			}
+
+			debug("Name is '%s'", name);
+			name = sdscat(name, buffer);
+			sdstrim(name, " \n");
+			debug("Set name to '%s'", name);
+			in_sequence = true;
+			debug("in_sequence is %d", in_sequence);
+		} else if (in_sequence) {
+			/* part of our sequence, cat to existing buffer */
+			sequence = sdscat(sequence, buffer);
+			sdstrim(sequence, " \n\t");
+		} else {
+			debug("Skipping line %d because we have not found a comment line yet", line_counter); 
+		}
+	}
+
+	free(buffer);
+
+	return _result;
+}
