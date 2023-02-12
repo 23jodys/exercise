@@ -47,7 +47,7 @@ int hamming(sds input1, sds input2);
  *
  * Returns TBD
  */
-sds consensus(sds input[], int input_len );
+sds consensus(sds input[], int input_size);
 
 /**
  * @brief Transform input DNA sds string into its reverse complement
