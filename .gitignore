@@ -7,3 +7,5 @@ test_hamm
 test_subs
 test_revc
 test_cons
+test_libfasta
+test_prot

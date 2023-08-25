@@ -53,23 +53,46 @@ void FastaStrings_free(FastaStrings** fasta_strings) {
 	*fasta_strings = NULL;
 }
 
-FastaStrings* FastaStrings_fromFile(FILE* stream, ssize_t (*getline)(char ** restrict, size_t * restrict, FILE * restrict)) {
-	size_t bufsize = 1000; //susp
+bool FastaStrings_check_equal_length(FastaStrings* strings)  {
+	if (strings->len < 2) {
+		debug("less than 2 fasta strings so its trivially true that they are the same length");
+		return true;
+	}
+	int first_line_len = sdslen(strings->sequences[0].sequence);
+
+	for (int i = 1; i < strings->len; i++) {
+		int this_len = sdslen(strings->sequences[i].sequence);
+		debug(
+			"At i = %d, first_line_len %d, sdslen %d",
+			i,
+			first_line_len,
+			this_len
+		);
+		if (first_line_len != this_len) {
+			debug("Differing lengths, returning false");
+			return false;
+		}
+	}
+	debug("Same lengths, returning true");
+	return true;
+}
+
+FastaStrings* FastaStrings_fromFile(FILE* stream) {
+	size_t bufsize = 0; //susp
 	char* buffer = NULL;
 	ssize_t lineSize = 0; 
 	int line_counter = 0;
 
 	FastaStrings* _result = FastaStrings_init();
 
-	if (getline == NULL) {
-		log_info("using default getline");
-	}
-
 	bool in_sequence = false;
 
 	sds sequence_buffer = sdsempty();
+	debug("sequencer_buffer size = %zu", sdslen(sequence_buffer));
 	sds name = sdsempty();
+	debug("name size = %zu", sdslen(name));
 	sds sequence = sdsempty();
+	debug("sequence size = %zu", sdslen(sequence));
 
 	while((lineSize = getline(&buffer, &bufsize, stream)) != -1) {
 		line_counter++;
@@ -84,17 +107,21 @@ FastaStrings* FastaStrings_fromFile(FILE* stream, ssize_t (*getline)(char ** res
 			if (in_sequence) {
 				/* starting a new description/sequence, store current*/
 				FastaStrings_add(_result, buffer , name);	
-				debug("Set name to '%s'", buffer); 
-				sequence = "\0";
-				debug("Set sequence to '%s'", sequence);
-				name = "\0";
-				debug("Set name to '%s'", name);
+
+				sdsfree(sequence);
+				sequence = sdsempty();
+				debug("reset sequence to '%s'", sequence);
+
+				sdsfree(name);
+				name = sdsempty();
+				debug("reset name to '%s'", name);
 			}
 
-			debug("Name is '%s'", name);
+			debug("Going to set name");
 			name = sdscat(name, buffer);
 			sdstrim(name, " \n");
 			debug("Set name to '%s'", name);
+
 			in_sequence = true;
 			debug("in_sequence is %d", in_sequence);
 		} else if (in_sequence) {

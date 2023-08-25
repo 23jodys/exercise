@@ -51,6 +51,6 @@ bool FastaStrings_check_equal_length(FastaStrings* strings);
 
 /* @brief Parse a file stream and store names and sequences in FastaStrings
 */
-FastaStrings* FastaStrings_fromFile(FILE* stream, ssize_t (*getline)(char ** restrict, size_t * restrict, FILE * restrict)); 
+FastaStrings* FastaStrings_fromFile(FILE* stream);
 
 #endif /* LIBFASTA_H */

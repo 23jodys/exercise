@@ -46,7 +46,7 @@ test_prot: LDLIBS += -lcmocka
 test_prot: prot.o test_prot.o sds.o
 
 test_cons: LDLIBS += -lcmocka
-test_cons: cons.o test_cons.o sds.o
+test_cons: cons.o test_cons.o sds.o libfasta.o
 
 test_libfasta: LDLIBS += -lcmocka
 test_libfasta: libfasta.o test_libfasta.o sds.o
