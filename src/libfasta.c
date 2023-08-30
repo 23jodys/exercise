@@ -133,6 +133,9 @@ FastaStrings* FastaStrings_fromFile(FILE* stream) {
 		}
 	}
 
+	sdsfree(sequence_buffer);
+	sdsfree(name);
+	sdsfree(sequence);
 	free(buffer);
 
 	return _result;

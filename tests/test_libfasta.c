@@ -103,6 +103,7 @@ static void test_five_strings(void** state) {
 	for (int i = 0; i < 5; i++) {
 		sdsfree(input[i]);
 	}
+	sdsfree(fake_name);
 }
 
 /**

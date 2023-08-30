@@ -26,8 +26,8 @@ Consensus* Consensus_fromFastaStrings(FastaStrings* strings) {
 	}
 	debug(
 		"Constructing profile with width i from 0 to %zu, strings j from 0 to %d",
-		sdslen(strings->sequences[0].sequence),
-		strings->len
+		sdslen(strings->sequences[0].sequence) - 1,
+		strings->len - 1
 	);
 
 	result->consensus = sdsempty();
@@ -126,6 +126,7 @@ Consensus* Consensus_init(void) {
 	Consensus* result = malloc(sizeof(struct Consensus));
 	result->profile_len = 0;
 	result->_size = 0;
+	result->profile = malloc(sizeof(ConsensusChar));
 	return result;
 }
 
@@ -137,14 +138,21 @@ void Consensus_free(Consensus** consensus) {
 	sdsfree((*consensus)->consensus);
 	(*consensus)->consensus = NULL;
 
+	free((*consensus)->profile);
+	(*consensus)->profile = NULL;
+
 	free(*consensus);
 	*consensus= NULL;
 }
 
 Consensus* Consensus_add_ConsensusChar(Consensus* c, ConsensusChar* ch) {
+	debug("c->profile_len = %d, c->_size = %d", c->profile_len, c->_size);
 	if (c->profile_len == c->_size) {
+		debug("c->profile == c->_size");
 		c->_size = (2 * c->_size) + 1;
+		debug("new c->_size %d", c->_size);
 		c->profile = realloc(c->profile, c->_size * sizeof(ConsensusChar*));
+		debug("realloced c->profile");
 	}
 	c->profile[c->profile_len] = ch;
 	c->profile_len++;
