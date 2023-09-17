@@ -17,5 +17,8 @@ jobs:
         with:
           submodules: true
 
+      - name: Install deps
+        run: sudo apt install libcmocka-dev
+
       - name: Test script
         run: make test
