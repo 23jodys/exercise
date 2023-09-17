@@ -18,4 +18,4 @@ jobs:
           submodules: true
 
       - name: Test script
-        run: echo "help"
+        run: make test
