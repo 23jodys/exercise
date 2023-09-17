@@ -59,5 +59,5 @@ int main(int argc, char* argv[]) {
 		cmocka_unit_test(test_consensus_basic), 
 		cmocka_unit_test(test_consensus_basic_T),
 	};
-	cmocka_run_group_tests(tests, NULL, NULL);
+	cmocka_run_group_tests_name("cons", tests, NULL, NULL);
 }

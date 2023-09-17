@@ -146,5 +146,5 @@ int main(int argc, char* argv[]) {
 		cmocka_unit_test(test_different_lengths),
 		cmocka_unit_test(test_same_lengths),
 	};
-	cmocka_run_group_tests(tests, NULL, NULL);
+	cmocka_run_group_tests_name("libfasta", tests, NULL, NULL);
 }

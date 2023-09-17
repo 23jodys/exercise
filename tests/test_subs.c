@@ -172,5 +172,5 @@ int main(int argc, char* argv[]) {
 		cmocka_unit_test(test_rightmost_substring_match),
 
 	};
-	cmocka_run_group_tests(tests, NULL, NULL);
+	cmocka_run_group_tests_name("subs", tests, NULL, NULL);
 }
