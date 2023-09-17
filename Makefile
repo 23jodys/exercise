@@ -81,4 +81,4 @@ docs: $(HEADERS)
 
 .PHONY: clean
 clean:
-	rm -rf *.o *.gcda *.gcno fizz test_* *.dSYM html/ latex/
+	rm -rf *.o *.gcda *.gcno fizz test_* *.dSYM cm_*.xml html/ latex/

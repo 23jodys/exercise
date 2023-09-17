@@ -9,3 +9,4 @@ test_revc
 test_cons
 test_libfasta
 test_prot
+cm_*.xml
