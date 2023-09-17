@@ -51,6 +51,13 @@ test_cons: cons.o test_cons.o sds.o libfasta.o
 test_libfasta: LDLIBS += -lcmocka
 test_libfasta: libfasta.o test_libfasta.o sds.o
 
+dna: dna.o sds.o
+
+rosalind: rosalind.o sds.o
+
+test_dna: LDLIBS += -lcmocka
+test_dna: dna.o sds.o test_dna.o
+
 
 .PHONY: test
 test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta
