@@ -62,5 +62,5 @@ int main(int argc, char* argv[]) {
 		cmocka_unit_test(test_zero),
 		cmocka_unit_test(test_one),
 	};
-	cmocka_run_group_tests(tests, NULL, NULL);
+	cmocka_run_group_tests_name("rna", tests, NULL, NULL);
 }

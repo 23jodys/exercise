@@ -76,3 +76,16 @@ Run the test suite to see the example. Some additional, but minimal testing is p
 make test_prot
 ./test_prot
 ```
+
+CONS (Rosalind)
+---------------
+
+http://rosalind.info/problems/cons/
+
+
+Run the test suite to see the example. Some additional, but minimal testing is performed in test_cons.c
+
+```
+make test_prot
+./test_prot
+```

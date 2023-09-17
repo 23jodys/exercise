@@ -90,5 +90,5 @@ int main(int argc, char* argv[]) {
 		cmocka_unit_test(test_div_30),
 		cmocka_unit_test(test_div_29),
 	};
-	cmocka_run_group_tests(tests, NULL, NULL);
+	cmocka_run_group_tests_name("fizzbuzz", tests, NULL, NULL);
 }

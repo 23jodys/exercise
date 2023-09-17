@@ -1,0 +1,35 @@
+name: Build and test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install deps
+        run: sudo apt install libcmocka-dev
+
+      - name: Build & Run
+        run: make test
+        env:
+          CMOCKA_MESSAGE_OUTPUT: XML
+          CMOCKA_XML_FILE: cm_%g.xml
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure ()
+        with:
+          name: cmocka Tests
+          path: cm_*.xml
+          reporter: java-junit 

@@ -45,17 +45,26 @@ test_subs: subs.o test_subs.o sds.o
 test_prot: LDLIBS += -lcmocka
 test_prot: prot.o test_prot.o sds.o
 
+test_cons: LDLIBS += -lcmocka
+test_cons: cons.o test_cons.o sds.o libfasta.o
+
+test_libfasta: LDLIBS += -lcmocka
+test_libfasta: libfasta.o test_libfasta.o sds.o
+
+
 .PHONY: test
-test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot
+test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta
 	./test_fizzbuzz
 	./test_rna
 	./test_hamm
 	./test_revc
 	./test_subs
 	./test_prot
+	./test_cons
+	./test_libfasta
 
 .PHONY: valgrind
-valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm valgrind_test_revc valgrind_test_subs valgrind_test_prot
+valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm valgrind_test_revc valgrind_test_subs valgrind_test_prot valgrind_test_cons valgrind_test_libfasta
 
 valgrind_%: %
 	valgrind --leak-check=full --error-exitcode=1 ./$* 
@@ -72,4 +81,4 @@ docs: $(HEADERS)
 
 .PHONY: clean
 clean:
-	rm -rf *.o *.gcda *.gcno fizz test_* *.dSYM html/ latex/
+	rm -rf *.o *.gcda *.gcno fizz test_* *.dSYM cm_*.xml html/ latex/

@@ -115,5 +115,5 @@ int main(int argc, char* argv[]) {
 		cmocka_unit_test(test_non_rna_twos),
 		cmocka_unit_test(test_lower_case_rna),
 	};
-	cmocka_run_group_tests(tests, NULL, NULL);
+	cmocka_run_group_tests_name("prot", tests, NULL, NULL);
 }

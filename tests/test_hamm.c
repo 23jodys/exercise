@@ -83,5 +83,5 @@ int main(int argc, char* argv[]) {
 		cmocka_unit_test(test_zero_length),
 		cmocka_unit_test(test_last_character),
 	};
-	cmocka_run_group_tests(tests, NULL, NULL);
+	cmocka_run_group_tests_name("hamm", tests, NULL, NULL);
 }

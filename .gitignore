@@ -6,4 +6,7 @@ test_rna
 test_hamm
 test_subs
 test_revc
-test_*
+test_cons
+test_libfasta
+test_prot
+cm_*.xml
