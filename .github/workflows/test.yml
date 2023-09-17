@@ -23,8 +23,8 @@ jobs:
       - name: Build & Run
         run: make test
         env:
-          CMOCKA_MESSAGE_OUTPUT=XML
-          CMOCKA_XML_FILE=cm_%g.xml
+          CMOCKA_MESSAGE_OUTPUT: XML
+          CMOCKA_XML_FILE: cm_%g.xml
 
       - name: Test Report
         uses: dorny/test-reporter@v1
