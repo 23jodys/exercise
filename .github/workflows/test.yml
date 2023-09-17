@@ -20,5 +20,13 @@ jobs:
       - name: Install deps
         run: sudo apt install libcmocka-dev
 
-      - name: Test script
+      - name: Build & Run
         run: make test
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure ()
+        with:
+          name: cmocka Tests
+          path: cm_*.xml
+          reporter: java-junit 
