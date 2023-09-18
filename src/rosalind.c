@@ -3,29 +3,42 @@
 #include <stdlib.h>
 #include <getopt.h>
 
+#include "dbg.h"
 #include "sds.h"
 #include "librosalind.h"
+
+typedef enum {
+	dna,
+	rna,
+	prot,
+	cons
+} PROBLEM;
+
+const static struct {
+	PROBLEM val;
+	const char *str;
+} conversion [] = {
+	{dna, "dna"},
+	{rna, "rna"},
+	{prot, "prot"},
+	{cons, "cons"}
+};
+
+PROBLEM str2problem(const char* str) {
+	for (int i=0; i < sizeof(conversion) / sizeof(conversion[0]); i++) {
+		if(!strcmp (str, conversion[i].str))
+			return conversion[i].val;
+	}
+	log_err("no enum conversion for %s", str);
+	abort();
+}
 
 int main(int argc, char *argv[]) {
 
 	int c;
 
-	typedef enum {
-		dna,
-		rna,
-		prot,
-		cons
-	} PROBLEM;
 
-	const static struct {
-		PROBLEM val;
-		const char *str;
-	} conversion [] = {
-		{dna, "dna"},
-		{rna, "rna"},
-		{prot, "prot"},
-		{cons, "cons"}
-	};
+	PROBLEM problem;
  
 	while(1) {
 		static struct option long_options[] =
@@ -44,10 +57,12 @@ int main(int argc, char *argv[]) {
 
 		switch (c) {
 			case 'p':
-				printf("option -p with value '%s'\n", optarg);
+				log_info("option -p with value '%s'", optarg);
+				problem = str2problem(optarg);
 				break;
 			case 'i':
-				printf("option -i with value '%s'\n", optarg);
+				log_info("option -i with value '%s'", optarg);
+				problem = str2problem(optarg);
 				break;
 			default:
 				abort();
@@ -55,20 +70,19 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	if (dna == problem) {
+		char *line = NULL;
+		size_t len = 0;
+		ssize_t lineSize = 0;
+		sds result = sdsempty();
 
-	/*
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t lineSize = 0;
-	sds result = sdsempty();
+		lineSize = getline(&line, &len, stdin);
 
-	lineSize = getline(&line, &len, stdin);
+		result = count(line, len);
+		printf("%s\n", result);
 
-	result = count(line, len);
-	printf("line: %s\n", result);
-
-	free (line);
-	*/
+		free (line);
+	}
 
 	return 0;
 }

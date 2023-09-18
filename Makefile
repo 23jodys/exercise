@@ -53,7 +53,7 @@ test_libfasta: libfasta.o test_libfasta.o sds.o
 
 dna: dna.o sds.o
 
-rosalind: rosalind.o sds.o
+rosalind: rosalind.o sds.o dna.o
 
 test_dna: LDLIBS += -lcmocka
 test_dna: dna.o sds.o test_dna.o
