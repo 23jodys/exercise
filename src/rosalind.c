@@ -5,13 +5,15 @@
 
 #include "dbg.h"
 #include "sds.h"
+#include "exercise.h"
 #include "librosalind.h"
 
 typedef enum {
 	dna,
 	rna,
 	prot,
-	cons
+	cons,
+	revc
 } PROBLEM;
 
 const static struct {
@@ -20,6 +22,7 @@ const static struct {
 } conversion [] = {
 	{dna, "dna"},
 	{rna, "rna"},
+	{revc, "revc"},
 	{prot, "prot"},
 	{cons, "cons"}
 };
@@ -36,7 +39,6 @@ PROBLEM str2problem(const char* str) {
 int main(int argc, char *argv[]) {
 
 	int c;
-
 
 	PROBLEM problem;
  
@@ -70,19 +72,29 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	if (dna == problem) {
-		char *line = NULL;
-		size_t len = 0;
-		ssize_t lineSize = 0;
-		sds result = sdsempty();
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t lineSize;
 
-		lineSize = getline(&line, &len, stdin);
+	lineSize = getline(&line, &len, stdin);
 
-		result = count(line, len);
-		printf("%s\n", result);
-
-		free (line);
+	if (lineSize == -1) {
+		log_err("failed to getline");
+		abort();
 	}
+
+	sds result = sdsnew(line);
+
+	if (dna == problem) {
+		result = count(result);
+	} else if (rna == problem) {
+		result = transcribe_dna_to_rna(result);
+	} else if (revc == problem) {
+		result = reverse_complement(result);
+	}
+	printf("%s\n", result);
+
+	free (line);
 
 	return 0;
 }

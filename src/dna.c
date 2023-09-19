@@ -3,13 +3,13 @@
 
 #include "exercise.h"
 
-sds count(char*  input, size_t length) {
+sds count(sds  input) {
 	int count_A = 0;
 	int count_C = 0;
 	int count_G = 0;
 	int count_T = 0;
 
-	for (size_t i = 0; i < length; i++) {
+	for (size_t i = 0; i < sdslen(input); i++) {
 		if (input[i] == 'A') {
 			count_A++;
 		} else if (input[i] == 'C') {
@@ -25,6 +25,3 @@ sds count(char*  input, size_t length) {
 	result = sdscatprintf(result, "%d %d %d %d", count_A, count_C, count_G, count_T);
 	return result;
 }	
-
-/* 
-*/

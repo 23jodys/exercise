@@ -16,10 +16,10 @@
  * @brief Given the simplest case, confirm that we count 1 of each base
  */
 static void test_dna_simple(void** state) {
-	char* input = "AGTC";
+	sds input = sdsnew("AGTC");
 	sds expected = sdsnew("1 1 1 1");
 
-	sds observed = count(input, 4);
+	sds observed = count(input);
 
 	assert_string_equal(observed, expected);
 }
@@ -28,37 +28,45 @@ static void test_dna_simple(void** state) {
  * @brief Given an empty string, confirm that we count 0 of each base
  */
 static void test_dna_empty(void** state) {
-	char* input = "";
+	sds input = sdsnew("");
 	sds expected = sdsnew("0 0 0 0");
 
-	sds observed = count(input, 4);
+	sds observed = count(input);
 
 	assert_string_equal(observed, expected);
+
+	sdsfree(input);
+	sdsfree(expected);
+	sdsfree(observed);
 }
 
 /**
  * @brief Given a string with all A, confirm we count them all
  */
 static void test_dna_all_a(void** state) {
-	char* input = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-	int input_len = 65;
+	sds input = sdsnew("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	sds expected = sdsnew("65 0 0 0");
 
-	sds observed = count(input, input_len);
+	sds observed = count(input);
 
 	assert_string_equal(observed, expected);
+
+	sdsfree(input);
+	sdsfree(expected);
+	sdsfree(observed);
 }
 
 /** @brief Given a string all A and a single T at end of string, confirm we have the correct count for both bases
  */
 static void test_dna_all_a_last_t(void** state) {
-	char* input = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT";
-	int input_len = 66;
+	sds input = sdsnew("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT");
 	sds expected = sdsnew("65 0 0 1");
 
-	sds observed = count(input, input_len);
-
+	sds observed = count(input);
 	assert_string_equal(observed, expected);
+	sdsfree(input);
+	sdsfree(expected);
+	sdsfree(observed);
 }
 
 int main(int argc, char* argv[]) {

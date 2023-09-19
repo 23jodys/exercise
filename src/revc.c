@@ -1,13 +1,13 @@
-#include "exercise.h"
+#include "librosalind.h"
 
-sds revc(sds input) {
+sds reverse_complement(sds input) {
 	int length = sdslen(input);
 	debug("input string length %d", length);
-	if (length > 1000) {
+	if (length > 2000) {
 		return NULL;
 	}
 
-	char buffer[1000];
+	char buffer[2000];
 	for (int i = 0; i < length; i++) {
 		char new;
 		switch(input[i]) {

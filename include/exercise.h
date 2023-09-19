@@ -17,7 +17,6 @@
  */
 sds fizzbuzz(int number);
 
-
 /**
  * @brief Transform dna to rna.
  *
@@ -40,15 +39,6 @@ sds transcribe_dna_to_rna(sds input);
  */
 int hamming(sds input1, sds input2);
 
-/**
- * @brief Transform input DNA sds string into its reverse complement
- *
- * Input is allowed up to 1000 (inclusive) base pairs. Any larger input is not transformed and a NULL is returned.
- *
- * @param [in] input 
- * @returns sds OR NULL
- */
-sds revc(sds input);
 
 /**
  * @brief Return start indexes for a substring contained in a string
@@ -102,5 +92,5 @@ SubsResult* subs_find(
  * @param input sds string of RNA input
  * @returns sds protein string
  */
-sds prot(sds input);
+sds translate_protein(sds input);
 

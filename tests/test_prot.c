@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <cmocka.h>
 
-#include <exercise.h>
+#include <librosalind.h>
 
 /**
  * @brief Given the example input, verify that the expected example output occurs.
@@ -18,7 +18,7 @@ static void test_basic(void** state) {
 	sds input = sdsnew("AUGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA");
 	sds expected = sdsnew("MAMAPRTEINSTRING");
 
-	sds output = prot(input);
+	sds output = translate_rna_to_protein(input);
 
 	printf("Expected (%d): %s\n", (int)sdslen(expected), expected);
 	printf("Output   (%d): %s\n", (int)sdslen(output), output);
@@ -34,7 +34,7 @@ static void test_basic(void** state) {
  */
 static void test_uneven_length(void** state) {
 	sds input = sdsnew("UGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA");
-	sds observed = prot(input);
+	sds observed = translate_rna_to_protein(input);
 
 	assert_null(observed);
 
@@ -48,7 +48,7 @@ static void test_zero_length(void** state) {
 
 	sds input = sdsempty();
 
-	sds observed = prot(input);
+	sds observed = translate_rna_to_protein(input);
 
 	assert_int_equal(0, sdslen(observed));
 
@@ -61,7 +61,7 @@ static void test_zero_length(void** state) {
  */
 static void test_non_rna(void** state) {
 	sds input = sdsnew("TAGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA");
-	sds observed = prot(input);
+	sds observed = translate_rna_to_protein(input);
 
 	assert_null(observed);
 
@@ -73,7 +73,7 @@ static void test_non_rna(void** state) {
  */
 static void test_non_rna_ones(void** state) {
 	sds input = sdsnew("ATGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA");
-	sds observed = prot(input);
+	sds observed = translate_rna_to_protein(input);
 
 	assert_null(observed);
 
@@ -85,7 +85,7 @@ static void test_non_rna_ones(void** state) {
  */
 static void test_non_rna_twos(void** state) {
 	sds input = sdsnew("AATGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA");
-	sds observed = prot(input);
+	sds observed = translate_rna_to_protein(input);
 
 	assert_null(observed);
 
@@ -97,7 +97,7 @@ static void test_non_rna_twos(void** state) {
  */
 static void test_lower_case_rna(void** state) {
 	sds input = sdsnew("aatGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA");
-	sds observed = prot(input);
+	sds observed = translate_rna_to_protein(input);
 
 	assert_null(observed);
 
