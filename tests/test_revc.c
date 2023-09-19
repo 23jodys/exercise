@@ -86,11 +86,11 @@ static void test_extra_long(void** state) {
  */
 static void test_1000(void** state) {
 	sds input = sdsempty();
-	for (int i = 0; i < 1000; i++) {
+	for (int i = 0; i < 1001; i++) {
 		input = sdscat(input, "A");
 	}
 	sds expected = sdsempty();
-	for (int i = 0; i < 1000; i++) {
+	for (int i = 0; i < 1001; i++) {
 		expected = sdscat(expected, "T");
 	}
 	debug("input: %s", input);
@@ -110,7 +110,7 @@ static void test_1000(void** state) {
  */
 static void test_1001(void** state) {
 	sds input = sdsempty();
-	for (int i = 0; i < 1001; i++) {
+	for (int i = 0; i < 1002; i++) {
 		input = sdscat(input, "A");
 	}
 	sds observed = reverse_complement(input);
