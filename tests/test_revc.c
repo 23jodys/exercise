@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <cmocka.h>
 
-#include <exercise.h>
+#include <librosalind.h>
 
 /**
  * @brief 
@@ -18,7 +18,7 @@ static void test_basic(void** state) {
 	sds input = sdsnew("AAAACCCGGT");
 	sds expected = sdsnew("ACCGGGTTTT");
 
-	sds observed = revc(input);
+	sds observed = reverse_complement(input);
 	assert_non_null(observed);
 
 	printf("Input:  %s\n", input);
@@ -38,7 +38,7 @@ static void test_one_length(void** state) {
 	sds input = sdsnew("A");
 	sds expected = sdsnew("T");
 
-	sds observed = revc(input);
+	sds observed = reverse_complement(input);
 	assert_non_null(observed);
 
 	assert_string_equal(observed, expected);
@@ -55,7 +55,7 @@ static void test_zero_length(void** state) {
 	sds input = sdsnew("");
 	sds expected = sdsnew("");
 
-	sds observed = revc(input);
+	sds observed = reverse_complement(input);
 
 	assert_non_null(observed);
 	assert_string_equal(observed, expected);
@@ -73,7 +73,7 @@ static void test_extra_long(void** state) {
 	for (int i = 0; i < 200; i++) {
 		input = sdscat(input, "ATGCATGCAT");
 	}
-	sds observed = revc(input);
+	sds observed = reverse_complement(input);
 
 	assert_null(observed);
 
@@ -86,17 +86,17 @@ static void test_extra_long(void** state) {
  */
 static void test_1000(void** state) {
 	sds input = sdsempty();
-	for (int i = 0; i < 1000; i++) {
+	for (int i = 0; i < 1001; i++) {
 		input = sdscat(input, "A");
 	}
 	sds expected = sdsempty();
-	for (int i = 0; i < 1000; i++) {
+	for (int i = 0; i < 1001; i++) {
 		expected = sdscat(expected, "T");
 	}
 	debug("input: %s", input);
 	debug("expected: %s", expected);
 
-	sds observed = revc(input);
+	sds observed = reverse_complement(input);
 
 	assert_string_equal(observed, expected);
 
@@ -110,10 +110,10 @@ static void test_1000(void** state) {
  */
 static void test_1001(void** state) {
 	sds input = sdsempty();
-	for (int i = 0; i < 1001; i++) {
+	for (int i = 0; i < 1002; i++) {
 		input = sdscat(input, "A");
 	}
-	sds observed = revc(input);
+	sds observed = reverse_complement(input);
 
 	assert_null(observed);
 

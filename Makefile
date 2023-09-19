@@ -51,9 +51,15 @@ test_cons: cons.o test_cons.o sds.o libfasta.o
 test_libfasta: LDLIBS += -lcmocka
 test_libfasta: libfasta.o test_libfasta.o sds.o
 
+dna: dna.o sds.o
+
+rosalind: rosalind.o sds.o dna.o rna.o revc.o
+
+test_dna: LDLIBS += -lcmocka
+test_dna: dna.o sds.o test_dna.o
 
 .PHONY: test
-test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta
+test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta test_dna
 	./test_fizzbuzz
 	./test_rna
 	./test_hamm
@@ -62,6 +68,7 @@ test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons t
 	./test_prot
 	./test_cons
 	./test_libfasta
+	./test_dna
 
 .PHONY: valgrind
 valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm valgrind_test_revc valgrind_test_subs valgrind_test_prot valgrind_test_cons valgrind_test_libfasta

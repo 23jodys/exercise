@@ -1,12 +1,8 @@
 *.o
 fizz
 fizzbuzz
-test_fizzbuzz
-test_rna
-test_hamm
-test_subs
-test_revc
-test_cons
-test_libfasta
-test_prot
+test_*
+rosalind
+html/
+latex/
 cm_*.xml

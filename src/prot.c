@@ -99,7 +99,7 @@ base lu(char input) {
 	return value;
 }
 
-sds prot(sds input) {
+sds translate_rna_to_protein(sds input) {
 	if (sdslen(input) % 3 != 0) {
 		return NULL;
 	}
