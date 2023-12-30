@@ -9,11 +9,13 @@
 #include "librosalind.h"
 
 typedef enum {
-	dna,
-	rna,
-	prot,
+	null,
 	cons,
-	revc
+	dna,
+	fib,
+	prot,
+	revc,
+	rna,
 } PROBLEM;
 
 const static struct {
@@ -24,8 +26,10 @@ const static struct {
 	{rna, "rna"},
 	{revc, "revc"},
 	{prot, "prot"},
-	{cons, "cons"}
+	{cons, "cons"},
+	{fib, "fib"},
 };
+
 
 PROBLEM str2problem(const char* str) {
 	for (int i=0; i < sizeof(conversion) / sizeof(conversion[0]); i++) {
@@ -37,11 +41,18 @@ PROBLEM str2problem(const char* str) {
 }
 
 int main(int argc, char *argv[]) {
+	bool success = false;
 
 	int c;
 
-	PROBLEM problem;
- 
+	PROBLEM problem = null;
+
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t lineSize;
+	sds result = NULL;
+	result = sdsnew(line);
+
 	while(1) {
 		static struct option long_options[] =
 		{
@@ -72,18 +83,13 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t lineSize;
+	check(problem, "No problem specified")
+
 
 	lineSize = getline(&line, &len, stdin);
 
-	if (lineSize == -1) {
-		log_err("failed to getline");
-		abort();
-	}
+	check((-1 == lineSize), "failed to getline");
 
-	sds result = sdsnew(line);
 
 	if (dna == problem) {
 		result = count(result);
@@ -91,10 +97,26 @@ int main(int argc, char *argv[]) {
 		result = transcribe_dna_to_rna(result);
 	} else if (revc == problem) {
 		result = reverse_complement(result);
+	} else if (fib == problem) {
+		int n, k;
+
+		calculate_breeding_pairs(n, k);
 	}
 	printf("%s\n", result);
 
-	free (line);
+	success = true;
 
-	return 0;
+error:
+	if (result)
+		sdsfree(result);
+
+	if (line != NULL)
+		free(line);
+
+	if (success) { 
+		return 0;
+	} else { 
+		return -1;
+	}
+
 }
