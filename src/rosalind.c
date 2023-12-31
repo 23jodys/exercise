@@ -51,7 +51,9 @@ int main(int argc, char *argv[]) {
 	size_t len = 0;
 	ssize_t lineSize;
 	sds result = NULL;
-	result = sdsnew(line);
+	sds *tokens;
+	int split_token = 0;
+	int i, j;
 
 	while(1) {
 		static struct option long_options[] =
@@ -87,8 +89,9 @@ int main(int argc, char *argv[]) {
 
 
 	lineSize = getline(&line, &len, stdin);
+	result = sdsnew(line);
 
-	check((-1 == lineSize), "failed to getline");
+	check(!(-1 == lineSize), "failed to getline");
 
 
 	if (dna == problem) {
@@ -98,9 +101,14 @@ int main(int argc, char *argv[]) {
 	} else if (revc == problem) {
 		result = reverse_complement(result);
 	} else if (fib == problem) {
-		int n, k;
+		tokens = sdssplitlen(result, sdslen(result), " ", 1, &split_token);	
+		check((2 == split_token), "Expected 2 integers on a line");
+		i = atoi(tokens[0]);
+		j = atoi(tokens[1]);
+		log_info("i = %d, j = %d", i, j);
 
-		calculate_breeding_pairs(n, k);
+		long int_result = calculate_breeding_pairs(i, j);
+		result = sdsfromlonglong(int_result);
 	}
 	printf("%s\n", result);
 
