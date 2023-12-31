@@ -36,3 +36,7 @@ sds reverse_complement(sds input);
  */
 sds translate_rna_to_protein(sds input);
 
+/** @brief calculate the total number of rabbit pairs after n months
+ */
+
+long calculate_breeding_pairs(int n, int k);
