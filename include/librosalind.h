@@ -40,3 +40,9 @@ sds translate_rna_to_protein(sds input);
  */
 
 long calculate_breeding_pairs(int n, int k);
+
+/** @brief stream interface for calling gc function from CLI
+ */
+sds gc_rosalind_interface(FILE* stream); 
+
+double count_gc(sds);

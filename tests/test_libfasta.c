@@ -68,6 +68,14 @@ static void test_FastaStrings_fromFile_basic(void** state) {
 	for (int i = 0; i < observed->len; i++) {
 		log_info("stored string is '%s'", observed->sequences[i].sequence);
 	}
+	assert_int_equal(observed->len, 3);
+
+	assert_string_equal(observed->sequences[0].sequence, "AATATTGG");
+	assert_string_equal(observed->sequences[1].sequence, "ATTTTTGG");
+	assert_string_equal(observed->sequences[2].sequence, "AATTTAGC");
+	assert_string_equal(observed->sequences[0].name, "Record1");
+	assert_string_equal(observed->sequences[1].name, "Record2");
+	assert_string_equal(observed->sequences[2].name, "Record3");
 
 	FastaStrings_free(&observed);
 }
