@@ -16,6 +16,7 @@ typedef enum {
 	prot,
 	revc,
 	rna,
+	gc,
 } PROBLEM;
 
 const static struct {
@@ -28,6 +29,7 @@ const static struct {
 	{prot, "prot"},
 	{cons, "cons"},
 	{fib, "fib"},
+	{gc, "gc"},
 };
 
 
@@ -40,6 +42,23 @@ PROBLEM str2problem(const char* str) {
 	abort();
 }
 
+sds get_single_sds_line(FILE* stream) {
+	char *line = NULL;
+	ssize_t lineSize;
+	size_t len = 0;
+
+	lineSize = getline(&line, &len, stream);
+	check(!(-1 == lineSize), "failed to getline");
+
+	sds result = sdsnew(line);
+	if (line != NULL)
+		free(line);
+	return result;
+error: 
+	free(line);
+	abort();
+}
+
 int main(int argc, char *argv[]) {
 	bool success = false;
 
@@ -47,10 +66,7 @@ int main(int argc, char *argv[]) {
 
 	PROBLEM problem = null;
 
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t lineSize;
-	sds result = NULL;
+	sds result = sdsempty();
 	sds *tokens;
 	int split_token = 0;
 	int i, j;
@@ -85,23 +101,25 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	check(problem, "No problem specified")
-
-
-	lineSize = getline(&line, &len, stdin);
-	result = sdsnew(line);
-
-	check(!(-1 == lineSize), "failed to getline");
+	check(problem, "No problem specified");
 
 
 	if (dna == problem) {
-		result = count(result);
+		sds input = sdsempty();
+		input = get_single_sds_line(stdin);
+		result = count(input);
 	} else if (rna == problem) {
-		result = transcribe_dna_to_rna(result);
+		sds input = sdsempty();
+		input = get_single_sds_line(stdin);
+		result = transcribe_dna_to_rna(input);
 	} else if (revc == problem) {
-		result = reverse_complement(result);
+		sds input = sdsempty();
+		input = get_single_sds_line(stdin);
+		result = reverse_complement(input);
 	} else if (fib == problem) {
-		tokens = sdssplitlen(result, sdslen(result), " ", 1, &split_token);	
+		sds input = sdsempty();
+		input = get_single_sds_line(stdin);
+		tokens = sdssplitlen(input, sdslen(input), " ", 1, &split_token);	
 		check((2 == split_token), "Expected 2 integers on a line");
 		i = atoi(tokens[0]);
 		j = atoi(tokens[1]);
@@ -109,6 +127,8 @@ int main(int argc, char *argv[]) {
 
 		long int_result = calculate_breeding_pairs(i, j);
 		result = sdsfromlonglong(int_result);
+	} else if (gc == problem) {
+		result = gc_rosalind_interface(stdin);
 	}
 	printf("%s\n", result);
 
@@ -118,8 +138,6 @@ error:
 	if (result)
 		sdsfree(result);
 
-	if (line != NULL)
-		free(line);
 
 	if (success) { 
 		return 0;

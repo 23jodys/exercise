@@ -12,11 +12,11 @@ FastaStrings* FastaStrings_init() {
 
 FastaStrings* FastaStrings_add(FastaStrings* strings, sds sequence, sds name)  {
 	/* copy sequence to our own */
-	sds new_sequence= sdsempty();
+	sds new_sequence = sdsempty();
 	new_sequence = sdscat(new_sequence, sequence);
 
 	/* copy name to our own */
-	sds new_name= sdsempty();
+	sds new_name = sdsempty();
 	new_name = sdscat(new_name, name);
 
 	if (strings->len == strings->_size) {
@@ -106,7 +106,13 @@ FastaStrings* FastaStrings_fromFile(FILE* stream) {
 			/* name/description/comment line */
 			if (in_sequence) {
 				/* starting a new description/sequence, store current*/
-				FastaStrings_add(_result, buffer , name);	
+				FastaStrings_add(_result, sequence, name);	
+				log_info("len of _result is now %d", _result->len);
+				log_info("Stored name = '%s', sequence = '%s'",
+					_result->sequences[_result->len - 1].name,
+					_result->sequences[_result->len - 1].sequence
+				);
+
 
 				sdsfree(sequence);
 				sequence = sdsempty();
@@ -119,7 +125,7 @@ FastaStrings* FastaStrings_fromFile(FILE* stream) {
 
 			debug("Going to set name");
 			name = sdscat(name, buffer);
-			sdstrim(name, " \n");
+			sdstrim(name, " \n>");
 			debug("Set name to '%s'", name);
 
 			in_sequence = true;
@@ -128,9 +134,14 @@ FastaStrings* FastaStrings_fromFile(FILE* stream) {
 			/* part of our sequence, cat to existing buffer */
 			sequence = sdscat(sequence, buffer);
 			sdstrim(sequence, " \n\t");
+			debug("Set sequence to '%s'", sequence);
 		} else {
 			debug("Skipping line %d because we have not found a comment line yet", line_counter); 
 		}
+	}
+	if (name && sequence) {
+		/* store the last record */
+		FastaStrings_add(_result, sequence, name);	
 	}
 
 	sdsfree(sequence_buffer);
