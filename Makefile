@@ -52,7 +52,7 @@ LDLIBS += $(if $(COVERAGE), --coverage )
 
 #dna: dna.o sds.o
 
-rosalind: rosalind.o sds.o dna.o rna.o revc.o fib.o gc.o libfasta.o
+rosalind: rosalind.o sds.o dna.o rna.o revc.o fib.o gc.o libfasta.o hamm.o
 
 #test_dna: LDLIBS += -lcmocka
 #test_dna: dna.o sds.o test_dna.o

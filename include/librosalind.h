@@ -46,3 +46,15 @@ long calculate_breeding_pairs(int n, int k);
 sds gc_rosalind_interface(FILE* stream); 
 
 double count_gc(sds);
+
+int hamm_rosalind_interface(FILE* stream, sds result);
+
+/**
+ * @brief Calculate hamming distance of two sds strings
+ *
+ * Allowed input is two sds strings. If dissimilar in length
+ * calculate the distance up to the length of the shorter one.
+ *
+ * Returns the hamming distance between the two strings.
+ */
+int hamming(sds input1, sds input2);
