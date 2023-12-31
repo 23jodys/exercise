@@ -17,6 +17,7 @@ typedef enum {
 	revc,
 	rna,
 	gc,
+	hamm,
 } PROBLEM;
 
 const static struct {
@@ -30,6 +31,7 @@ const static struct {
 	{cons, "cons"},
 	{fib, "fib"},
 	{gc, "gc"},
+	{hamm, "hamm"},
 };
 
 
@@ -129,6 +131,8 @@ int main(int argc, char *argv[]) {
 		result = sdsfromlonglong(int_result);
 	} else if (gc == problem) {
 		result = gc_rosalind_interface(stdin);
+	} else if (hamm == problem) {
+		hamm_rosalind_interface(stdin, result);
 	}
 	printf("%s\n", result);
 
