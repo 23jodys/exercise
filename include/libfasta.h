@@ -1,10 +1,11 @@
+/* define _GNU_SOURCE to pull in POSIX 2008 so we have getline */
+#define _GNU_SOURCE
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "sds.h"
 
-//#define NDEBUG 1 
 #include "dbg.h"
 
 #ifndef LIBFASTA_H

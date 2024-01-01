@@ -1,3 +1,5 @@
+#include "librosalind.h"
+#include "libfasta.h"
 #include "cons.h"
 
 ConsensusChar* ConsensusChar_init() {

@@ -66,7 +66,7 @@ static void test_FastaStrings_fromFile_basic(void** state) {
 	FastaStrings* observed = FastaStrings_fromFile(fasta_file);
 
 	for (int i = 0; i < observed->len; i++) {
-		log_info("stored string is '%s'", observed->sequences[i].sequence);
+		debug("stored string is '%s'", observed->sequences[i].sequence);
 	}
 	assert_int_equal(observed->len, 3);
 

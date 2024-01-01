@@ -9,7 +9,6 @@
 #include <unistd.h>
 #include <cmocka.h>
 
-#include "exercise.h"
 #include "librosalind.h"
 
 /**
