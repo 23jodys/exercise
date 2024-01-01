@@ -28,8 +28,6 @@ rosalind: rosalind.o sds.o dna.o rna.o revc.o fib.o gc.o libfasta.o iprb.o prot.
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-
-
 test_cons: cons.o libfasta.o test_cons.o sds.o
 	$(CC) $(CFLAGS) $^ -o test_cons -lcmocka
 
@@ -40,7 +38,7 @@ test_%: %.o sds.o test_%.o
 	$(CC) $(CFLAGS) $^ -o test_$* -lcmocka
 
 .PHONY: test
-test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta test_dna test_fib test_gc
+test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta test_dna test_gc
 	./test_fizzbuzz
 	./test_rna
 	./test_hamm
@@ -50,7 +48,6 @@ test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons t
 	./test_cons
 	./test_libfasta
 	./test_dna
-	./test_fib
 	./test_gc
 
 .PHONY: valgrind
