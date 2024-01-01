@@ -6,7 +6,6 @@
 #include <string.h>
 #include "sds.h"
 
-//#define NDEBUG 1 
 #include "dbg.h"
 
 /**

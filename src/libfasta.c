@@ -96,7 +96,7 @@ FastaStrings* FastaStrings_fromFile(FILE* stream) {
 
 	while((lineSize = getline(&buffer, &bufsize, stream)) != -1) {
 		line_counter++;
-		log_info(
+		debug(
 			"fasta_file_to_strings, string %s, line_counter %d",
 			buffer,
 			line_counter
@@ -107,8 +107,8 @@ FastaStrings* FastaStrings_fromFile(FILE* stream) {
 			if (in_sequence) {
 				/* starting a new description/sequence, store current*/
 				FastaStrings_add(_result, sequence, name);	
-				log_info("len of _result is now %d", _result->len);
-				log_info("Stored name = '%s', sequence = '%s'",
+				debug("len of _result is now %d", _result->len);
+				debug("Stored name = '%s', sequence = '%s'",
 					_result->sequences[_result->len - 1].name,
 					_result->sequences[_result->len - 1].sequence
 				);

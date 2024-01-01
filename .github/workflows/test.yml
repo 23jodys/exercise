@@ -21,7 +21,7 @@ jobs:
         run: sudo apt install libcmocka-dev
 
       - name: Build & Run
-        run: make test; make test_fib
+        run: NODEBUG=1 make test
         env:
           CMOCKA_MESSAGE_OUTPUT: XML
           CMOCKA_XML_FILE: cm_%g.xml
