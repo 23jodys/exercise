@@ -38,7 +38,7 @@ test_%: %.o sds.o test_%.o
 	$(CC) $(CFLAGS) $^ -o test_$* -lcmocka
 
 .PHONY: test
-test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta test_dna 
+test: test_gc test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta test_dna 
 	./test_fizzbuzz
 	./test_rna
 	./test_hamm
@@ -48,6 +48,7 @@ test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons t
 	./test_cons
 	./test_libfasta
 	./test_dna
+	./test_gc
 
 .PHONY: valgrind
 valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm valgrind_test_revc valgrind_test_subs valgrind_test_prot valgrind_test_cons valgrind_test_libfasta
