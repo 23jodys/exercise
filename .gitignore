@@ -6,3 +6,4 @@ rosalind
 html/
 latex/
 cm_*.xml
+compile_commands.json

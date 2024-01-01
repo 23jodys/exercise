@@ -1,4 +1,5 @@
-#include "exercise.h"
+#include "librosalind.h"
+#include "dbg.h"
 
 /*
  * The naive approach would be substring matching every possible codon. A less
@@ -49,12 +50,12 @@ struct Node T = {.value = 'T'};
 struct Node V = {.value = 'V'};
 struct Node W = {.value = 'W'};
 struct Node Y = {.value = 'Y'};
-struct Node Stop = {.value = '0'};
+struct Node Stop = {.value = '\0'};
 
 Node root = {
 	.nodes[baseG] = &((Node)
 		{
-			.nodes[baseG] = &((Node) {.nodes[baseG] = &G, .nodes[baseA] = &G, .nodes[baseU] = &G, .nodes[baseC] = &G}),
+			.nodes[baseG] = &((Node) {.nodes[baseG] = &G, .nodes[baseA] = &G, .nodes[baseC] = &G, .nodes[baseU] = &G}),
 			.nodes[baseA] = &((Node) {.nodes[baseG] = &E, .nodes[baseA] = &E, .nodes[baseC] = &D, .nodes[baseU] = &D}),
 			.nodes[baseC] = &((Node) {.nodes[baseG] = &A, .nodes[baseA] = &A, .nodes[baseC] = &A, .nodes[baseU] = &A}),
 			.nodes[baseU] = &((Node) {.nodes[baseG] = &V, .nodes[baseA] = &V, .nodes[baseC] = &V, .nodes[baseU] = &V}),
@@ -70,8 +71,8 @@ Node root = {
 	),
 	.nodes[baseC] = &((Node)
 		{
-			.nodes[baseG] = &((Node) {.nodes[baseA] = &R, .nodes[baseU] = &R, .nodes[baseC] = &R, .nodes[baseG] = &R}),
-			.nodes[baseA] = &((Node) {.nodes[baseA] = &Q, .nodes[baseU] = &H, .nodes[baseC] = &H, .nodes[baseG] = &Q}),
+			.nodes[baseG] = &((Node) {.nodes[baseG] = &R, .nodes[baseA] = &R, .nodes[baseC] = &R, .nodes[baseU] = &R}),
+			.nodes[baseA] = &((Node) {.nodes[baseG] = &Q, .nodes[baseA] = &Q, .nodes[baseC] = &H, .nodes[baseU] = &H}),
 			.nodes[baseC] = &((Node) {.nodes[baseG] = &P, .nodes[baseA] = &P, .nodes[baseC] = &P, .nodes[baseU] = &P}),
 			.nodes[baseU] = &((Node) {.nodes[baseG] = &L, .nodes[baseA] = &L, .nodes[baseC] = &L, .nodes[baseU] = &L}),
 		}
@@ -116,16 +117,36 @@ sds translate_rna_to_protein(sds input) {
 
 		if (x == baseNone || y == baseNone || z == baseNone) {
 			sdsfree(result);
+			log_info("Couldn't find result");
 			return NULL;
 		}
 		char protein = root.nodes[x]->nodes[y]->nodes[z]->value;
-		if (protein != '0') {
+		if (protein != '\0') {
 			debug("catting '%c' to result %s", protein, result);
 			result = sdscatlen(result, &(protein), 1);
-		}
+		} 
 	}
 
 	debug("result: %s", result);
 
 	return result;
+}
+
+sds prot_rosalind_interface(FILE* stream) {
+	sds input = sdsempty();
+	sds result = sdsempty();
+	char *line = NULL;
+	ssize_t lineSize;
+	size_t len = 0;
+
+	lineSize = getline(&line, &len, stream);
+	check(!(-1 == lineSize), "failed to getline");
+	input = sdsnew(line);
+	sdstrim(input, " \n\t");
+
+	result = translate_rna_to_protein(input);
+
+	return result;
+error:
+	abort();
 }

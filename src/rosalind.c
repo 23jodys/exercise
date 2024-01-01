@@ -1,4 +1,6 @@
 #include <stdbool.h>
+/* define _GNU_SOURCE to pull in POSIX 2008 so we have getline */
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
@@ -18,6 +20,7 @@ typedef enum {
 	rna,
 	gc,
 	hamm,
+	iprb,
 } PROBLEM;
 
 const static struct {
@@ -32,6 +35,7 @@ const static struct {
 	{fib, "fib"},
 	{gc, "gc"},
 	{hamm, "hamm"},
+	{iprb, "iprb"},
 };
 
 
@@ -133,9 +137,15 @@ int main(int argc, char *argv[]) {
 		result = gc_rosalind_interface(stdin);
 	} else if (hamm == problem) {
 		hamm_rosalind_interface(stdin, result);
+	} else if (iprb == problem) {
+		result = iprb_rosalind_interface(stdin);
+	} else if (prot == problem) {
+		result = prot_rosalind_interface(stdin);
+	} else {
+		success = false;
+		goto error;
 	}
 	printf("%s\n", result);
-
 	success = true;
 
 error:
