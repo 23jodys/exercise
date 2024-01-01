@@ -53,11 +53,6 @@ Consensus* Consensus_fromFastaStrings(FastaStrings* strings) {
 				debug("Found T at width %d, string %d, c->T %d", i, j, consensus_char->T);
 			}
 		}
-		//result->profile_len++;
-		//debug("result->profile_len %d", result->profile_len);
-
-		//result->profile[i] = consensus_char;
-		//debug("result->profile[%d] set to new consensus char", i);
 		result = Consensus_add_ConsensusChar(result, consensus_char);
 
 		char* c = ConsensusChar_calculate(consensus_char);
@@ -110,6 +105,12 @@ sds Consensus_sprint(Consensus* c) {
 		line3 = sdscatprintf(line3, "%d ", c->profile[i]->G);
 		line4 = sdscatprintf(line4, "%d ", c->profile[i]->T);
 	}
+
+	sdstrim(line1, " ");
+	sdstrim(line2, " ");
+	sdstrim(line3, " ");
+	sdstrim(line4, " ");
+
 	sds lines[5] = {line0, line1, line2, line3, line4};
 
 	sds result = sdsjoinsds(lines, 5, "\n", 1);
@@ -159,4 +160,23 @@ Consensus* Consensus_add_ConsensusChar(Consensus* c, ConsensusChar* ch) {
 	c->profile[c->profile_len] = ch;
 	c->profile_len++;
 	return c;
+}
+
+sds cons_rosalind_interface(FILE* stream) {
+	sds result = sdsempty();
+
+	FastaStrings* strings = FastaStrings_init();
+
+	strings = FastaStrings_fromFile(stream);
+
+	for (int i = 0; i < strings->len; i++) {
+		debug("name: '%s' sequence: '%s'", strings->sequences[i].name, strings->sequences[i].sequence);
+	}
+
+	Consensus* consensus = Consensus_init();
+	consensus = Consensus_fromFastaStrings(strings);
+
+	result = Consensus_sprint(consensus);
+
+	return result;
 }

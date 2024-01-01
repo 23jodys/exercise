@@ -8,6 +8,7 @@
 #include "dbg.h"
 #include "sds.h"
 #include "librosalind.h"
+#include "cons.h"
 
 typedef enum {
 	null,
@@ -144,6 +145,8 @@ int main(int argc, char *argv[]) {
 		result = prot_rosalind_interface(stdin);
 	} else if (subs == problem) {
 		result = subs_rosalind_interface(stdin);
+	} else if (cons == problem) {
+		result = cons_rosalind_interface(stdin);
 	} else {
 		success = false;
 		goto error;
@@ -154,7 +157,6 @@ int main(int argc, char *argv[]) {
 error:
 	if (result)
 		sdsfree(result);
-
 
 	if (success) { 
 		return 0;
