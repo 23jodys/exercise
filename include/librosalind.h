@@ -1,4 +1,6 @@
 #include <stdbool.h>
+/* define _GNU_SOURCE to pull in POSIX 2008 so we have getline */
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +38,8 @@ sds reverse_complement(sds input);
  */
 sds translate_rna_to_protein(sds input);
 
+sds prot_rosalind_interface(FILE* stream); 
+
 /** @brief calculate the total number of rabbit pairs after n months
  */
 
@@ -58,3 +62,7 @@ int hamm_rosalind_interface(FILE* stream, sds result);
  * Returns the hamming distance between the two strings.
  */
 int hamming(sds input1, sds input2);
+
+sds iprb_rosalind_interface(FILE* stream);
+
+double calculate_mendelian_inheritance(double k, double m, double n);

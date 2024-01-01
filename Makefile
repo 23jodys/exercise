@@ -23,49 +23,13 @@ LDLIBS += $(if $(or $(COVERAGE),$(DEBUG)), -g )
 LDLIBS += $(if $(COVERAGE), --coverage )
 
 
+rosalind: rosalind.o sds.o dna.o rna.o revc.o fib.o gc.o libfasta.o iprb.o prot.o
 
-# test_fizzbuzz: LDLIBS += -lcmocka
-# test_fizzbuzz: fizzbuzz.o test_fizzbuzz.o sds.o
+%.o: %.c
+	bear -- $(CC) $(CFLAGS) -c -o $@ $^
 
-#fizzbuzz.o: exercise.h sds.o
-
-#fizz: fizzbuzz.o sds.o
-
-
-#test_hamm: LDLIBS += -lcmocka
-#test_hamm: hamm.o test_hamm.o sds.o
-
-#test_revc: LDLIBS += -lcmocka
-#test_revc: revc.o test_revc.o sds.o
-
-#test_subs: LDLIBS += -lcmocka
-#test_subs: subs.o test_subs.o sds.o
-
-#test_prot: LDLIBS += -lcmocka
-#test_prot: prot.o test_prot.o sds.o
-
-#test_cons: LDLIBS += -lcmocka
-#test_cons: cons.o test_cons.o sds.o libfasta.o
-
-#test_libfasta: LDLIBS += -lcmocka
-#test_libfasta: libfasta.o test_libfasta.o sds.o
-
-#dna: dna.o sds.o
-
-rosalind: rosalind.o sds.o dna.o rna.o revc.o fib.o gc.o libfasta.o hamm.o
-
-#test_dna: LDLIBS += -lcmocka
-#test_dna: dna.o sds.o test_dna.o
-
-
-#test_rna: LDLIBS += -lcmocka
-#test_%: rna.o test_rna.o sds.o
 test_%: %.o sds.o test_%.o
-	$(CC) $^ -o test_$* -lcmocka
-
-#test_rna.o: test_rna.c
-#sds.o: sds.c
-#test_%: LDLIBS += -lcmocka
+	$(CC) $(CFLAGS) $^ -o test_$* -lcmocka
 
 .PHONY: test
 test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta test_dna
