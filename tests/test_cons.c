@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <cmocka.h>
 
+#include "librosalind.h"
+#include "libfasta.h"
 #include "cons.h"
 
 /**
