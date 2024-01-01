@@ -28,6 +28,8 @@ LDLIBS += $(if $(COVERAGE), --coverage )
 #
 #test_cons: cons.o libfasta.o test_cons.o sds.o
 #	$(CC) $(CFLAGS) $^ -o test_cons -lcmocka
+test_gc.o: test_gc.c
+	$(CC) $(CFLAGS) -c -o $@ $^
 
 test_gc: gc.o libfasta.o test_gc.o sds.o
 	$(CC) $(CFLAGS) $^ -o test_gc -lcmocka
