@@ -25,8 +25,8 @@ LDLIBS += $(if $(COVERAGE), --coverage )
 
 #rosalind: rosalind.o sds.o dna.o rna.o revc.o fib.o gc.o libfasta.o iprb.o prot.o subs.o hamm.o
 #
-#%.o: %.c
-#	$(CC) $(CFLAGS) -c -o $@ $^
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $^
 #
 #test_cons: cons.o libfasta.o test_cons.o sds.o
 #	$(CC) $(CFLAGS) $^ -o test_cons -lcmocka
