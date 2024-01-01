@@ -1,4 +1,4 @@
-#include "exercise.h"
+#include "librosalind.h"
 
 int hamming(sds input1, sds input2) {
 	/* Choose the shortest length string */
@@ -32,7 +32,6 @@ int hamm_rosalind_interface(FILE* stream, sds result) {
 	char *line = NULL;
 	ssize_t lineSize;
 	size_t len = 0;
-	bool success = false;
 	int _result = -1;
 
 	lineSize = getline(&line, &len, stream);
@@ -50,7 +49,6 @@ int hamm_rosalind_interface(FILE* stream, sds result) {
 
 	result = sdscatprintf(result, "%d", _result);
 
-	success = true;
 	return 0;
 
 error: 

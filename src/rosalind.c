@@ -7,7 +7,6 @@
 
 #include "dbg.h"
 #include "sds.h"
-#include "exercise.h"
 #include "librosalind.h"
 
 typedef enum {
@@ -21,6 +20,7 @@ typedef enum {
 	gc,
 	hamm,
 	iprb,
+	subs,
 } PROBLEM;
 
 const static struct {
@@ -36,6 +36,7 @@ const static struct {
 	{gc, "gc"},
 	{hamm, "hamm"},
 	{iprb, "iprb"},
+	{subs, "subs"},
 };
 
 
@@ -141,6 +142,8 @@ int main(int argc, char *argv[]) {
 		result = iprb_rosalind_interface(stdin);
 	} else if (prot == problem) {
 		result = prot_rosalind_interface(stdin);
+	} else if (subs == problem) {
+		result = subs_rosalind_interface(stdin);
 	} else {
 		success = false;
 		goto error;

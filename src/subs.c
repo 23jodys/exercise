@@ -1,4 +1,4 @@
-#include "exercise.h"
+#include "librosalind.h"
 
 SubsResult* subs_create() {
 	SubsResult* _result;
@@ -79,4 +79,37 @@ SubsResult* subs_find(sds string, sds substring) {
 		}
 	}
 	return result;
+}
+
+sds subs_rosalind_interface(FILE* stream) {
+	sds result = sdsempty();
+
+	char *line = NULL;
+	ssize_t lineSize;
+	size_t len = 0;
+	SubsResult* _result;
+
+	lineSize = getline(&line, &len, stream);
+	check(!(-1 == lineSize), "failed to getline");
+	sds input_1 = sdsnew(line);
+	sdstrim(input_1, " \n\t");
+
+	lineSize = getline(&line, &len, stream);
+	check(!(-1 == lineSize), "failed to getline");
+	sds input_2 = sdsnew(line);
+	sdstrim(input_2, " \n\t");
+
+	_result = subs_find(input_1, input_2);
+
+	for (int i = 0; i < _result->len; i++) {
+		result = sdscatprintf(result, "%d ", _result->substrings[i]);
+	}
+
+	log_info("Returning: %s", result);
+
+	return result;
+
+error:
+	free(line);
+	abort();
 }
