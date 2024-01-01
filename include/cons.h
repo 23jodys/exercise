@@ -33,3 +33,4 @@ sds Consensus_sprint(Consensus*);
 void Consensus_free(Consensus** consensus); 
 Consensus* Consensus_add_ConsensusChar(Consensus* c, ConsensusChar* ch);
 Consensus* Consensus_fromFastaStrings(FastaStrings* strings); 
+sds cons_rosalind_interface(FILE* stream); 
