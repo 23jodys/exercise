@@ -38,7 +38,11 @@ sds reverse_complement(sds input);
  */
 sds translate_rna_to_protein(sds input);
 
+
 sds prot_rosalind_interface(FILE* stream); 
+
+/* Related to solving the rna problem on rosalind */
+sds transcribe_dna_to_rna(sds input); 
 
 /** @brief calculate the total number of rabbit pairs after n months
  */
@@ -66,3 +70,17 @@ int hamming(sds input1, sds input2);
 sds iprb_rosalind_interface(FILE* stream);
 
 double calculate_mendelian_inheritance(double k, double m, double n);
+
+/**
+ * @brief Structure for returning results from substring functions
+ */
+typedef struct SubsResult {
+	int len; /**< @param the number of substrings found */;
+	int _size; 
+	char* error; /**< Text error message */;
+	int* substrings; /**< @param the array of results, dynamically allocated */
+} SubsResult;
+
+SubsResult* subs_find(sds string, sds substring);
+
+sds subs_rosalind_interface(FILE* stream); 
