@@ -1,7 +1,7 @@
 *.o
 fizz
 fizzbuzz
-test_*
+/test_*
 rosalind
 html/
 latex/
