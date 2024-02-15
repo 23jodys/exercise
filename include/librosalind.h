@@ -83,3 +83,10 @@ typedef struct SubsResult {
 SubsResult* subs_find(sds string, sds substring);
 
 sds subs_rosalind_interface(FILE* stream); 
+
+/**
+ * @brief ORF rosaline problem
+ */
+
+sds orf_rosalind_interface(FILE* stream);
+void find_orf(sds input, sds result[], int result_len);

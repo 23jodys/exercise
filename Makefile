@@ -31,6 +31,9 @@ test_cons: cons.o libfasta.o test_cons.o sds.o
 test_gc: gc.o libfasta.o test_gc.o sds.o
 	$(CC) $(CFLAGS) $^ -o test_gc -lcmocka
 
+test_orf: orf.o libfasta.o test_orf.o sds.o
+	$(CC) $(CFLAGS) $^ -o test_orf -lcmocka
+
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
@@ -38,7 +41,7 @@ test_%: %.o sds.o test_%.o
 	$(CC) $(CFLAGS) $^ -o test_$* -lcmocka
 
 .PHONY: test
-test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta test_dna test_fib test_gc test_iprb
+test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta test_dna test_fib test_gc test_iprb test_orf
 	./test_fizzbuzz
 	./test_rna
 	./test_hamm
@@ -53,7 +56,7 @@ test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons t
 	./test_iprb
 
 .PHONY: valgrind
-valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm valgrind_test_revc valgrind_test_subs valgrind_test_prot valgrind_test_cons valgrind_test_libfasta
+valgrind: valgrind_test_rna valgrind_test_fizzbuzz valgrind_test_hamm valgrind_test_revc valgrind_test_subs valgrind_test_prot valgrind_test_cons valgrind_test_libfasta valgrind_test_orf
 
 valgrind_%: %
 	valgrind --leak-check=full --error-exitcode=1 ./$* 
