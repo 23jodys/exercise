@@ -102,6 +102,7 @@ base lu(char input) {
 
 sds translate_rna_to_protein(sds input) {
 	if (sdslen(input) % 3 != 0) {
+		log_err("input length %zu not divisible by 3", sdslen(input));
 		return NULL;
 	}
 	sds result = sdsempty();
@@ -109,11 +110,8 @@ sds translate_rna_to_protein(sds input) {
 	for (int i = 0; i < sdslen(input); i += 3) {
 		debug("i = %d, looking at substring: %.3s", i, &(input[i]));
 		base x = lu(input[i+0]);
-		debug("input[i+0] = %c", input[i+0]);
 		base y = lu(input[i+1]);
-		debug("input[i+1] = %c", input[i+1]);
 		base z = lu(input[i+2]);
-		debug("input[i+0] = %c", input[i+2]);
 
 		if (x == baseNone || y == baseNone || z == baseNone) {
 			sdsfree(result);
