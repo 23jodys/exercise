@@ -87,6 +87,15 @@ sds subs_rosalind_interface(FILE* stream);
 /**
  * @brief ORF rosaline problem
  */
+struct ProteinTranslation {
+	int start;
+	int end;
+	sds protein;
+	struct ProteinTranslation *next, *prev;
+};
+
+typedef struct ProteinTranslation ProteinTranslation;
 
 sds orf_rosalind_interface(FILE* stream);
-void find_orf(sds input, sds result[], int result_len);
+ProteinTranslation* build_orf(sds input);
+int difference_orf(ProteinTranslation* a, ProteinTranslation* b, ProteinTranslation** missing); 

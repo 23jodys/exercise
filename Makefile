@@ -23,7 +23,7 @@ endif
 LDLIBS += $(if $(or $(COVERAGE),$(DEBUG)), -g )
 LDLIBS += $(if $(COVERAGE), --coverage )
 
-rosalind: rosalind.o sds.o dna.o rna.o revc.o fib.o gc.o libfasta.o iprb.o prot.o subs.o hamm.o
+rosalind: rosalind.o sds.o dna.o rna.o revc.o fib.o gc.o libfasta.o iprb.o prot.o subs.o hamm.o orf.o
 
 test_cons: cons.o libfasta.o test_cons.o sds.o
 	$(CC) $(CFLAGS) $^ -o test_cons -lcmocka
@@ -31,7 +31,7 @@ test_cons: cons.o libfasta.o test_cons.o sds.o
 test_gc: gc.o libfasta.o test_gc.o sds.o
 	$(CC) $(CFLAGS) $^ -o test_gc -lcmocka
 
-test_orf: orf.o libfasta.o test_orf.o sds.o
+test_orf: orf.o libfasta.o test_orf.o sds.o prot.o revc.o
 	$(CC) $(CFLAGS) $^ -o test_orf -lcmocka
 
 %.o: %.c
