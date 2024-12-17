@@ -99,3 +99,9 @@ typedef struct ProteinTranslation ProteinTranslation;
 sds orf_rosalind_interface(FILE* stream);
 ProteinTranslation* build_orf(sds input);
 int difference_orf(ProteinTranslation* a, ProteinTranslation* b, ProteinTranslation** missing); 
+
+/**
+ * @brief GRPH rosalind problem
+ */
+
+sds grph_rosalind_interface(FILE* stream);

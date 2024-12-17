@@ -7,3 +7,5 @@ html/
 latex/
 cm_*.xml
 compile_commands.json
+.DS_Store
+.idea/

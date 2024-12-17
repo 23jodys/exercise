@@ -22,6 +22,7 @@ typedef enum {
 	iprb,
 	subs,
 	orf,
+	grph,
 } PROBLEM;
 
 const static struct {
@@ -39,6 +40,7 @@ const static struct {
 	{iprb, "iprb"},
 	{subs, "subs"},
 	{orf, "orf"},
+	{grph, "grph"},
 };
 
 
@@ -148,6 +150,8 @@ int main(int argc, char *argv[]) {
 		result = subs_rosalind_interface(stdin);
 	} else if (orf == problem) {
 		result = orf_rosalind_interface(stdin);
+	} else if (grph == problem) {
+		result = grph_rosalind_interface(stdin);
 	} else {
 		success = false;
 		goto error;

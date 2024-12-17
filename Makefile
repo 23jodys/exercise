@@ -43,7 +43,7 @@ test_%: %.o sds.o test_%.o
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o test_$* -lcmocka
 
 .PHONY: test
-test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta test_dna test_fib test_gc test_iprb test_orf
+test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons test_libfasta test_dna test_fib test_gc test_iprb test_orf test_grph
 	./test_fizzbuzz
 	./test_rna
 	./test_hamm
@@ -56,6 +56,8 @@ test: test_fizzbuzz test_rna test_hamm test_revc test_subs test_prot test_cons t
 	./test_fib
 	./test_gc
 	./test_iprb
+	./test_grph
+
 
 all: test
 
