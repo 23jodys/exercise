@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "sds.h"
+#include "libfasta.h"
 
 #include "dbg.h"
 
@@ -99,3 +100,17 @@ typedef struct ProteinTranslation ProteinTranslation;
 sds orf_rosalind_interface(FILE* stream);
 ProteinTranslation* build_orf(sds input);
 int difference_orf(ProteinTranslation* a, ProteinTranslation* b, ProteinTranslation** missing); 
+
+/**
+ * @brief GRPH rosalind problem
+ */
+struct GraphAdjacencyNode {
+	sds name1;
+	sds name2;
+};
+
+typedef struct GraphAdjacencyNode GraphAdjacencyNode;
+
+sds grph_rosalind_interface(FILE* stream);
+bool determine_if_overlapping(sds, sds, int);
+int make_overlap_graph(FastaStrings* input, GraphAdjacencyNode* nodes, int overlap);
