@@ -16,9 +16,79 @@ static void test_grph_basic(void** state) {
 	input = FastaStrings_add(input, "AAATCCC", "Rosalind_0442");
 	input = FastaStrings_add(input, "GGGTGGG", "Rosalind_5013");
 
-	ovl_List* result = ovl_overlap_graph(input, 3);
-	assert_int_equal(3, result->size);
+	ovl_List* observed = ovl_overlap_graph(input, 3);
+	assert_int_equal(3, observed->size);
 
+	ovl_List* expected = ovl_init();
+	expected = ovl_add(expected, sdsnew("Rosalind_0498"), sdsnew("Rosalind_0442"));
+	expected = ovl_add(expected, sdsnew("Rosalind_0498"), sdsnew("Rosalind_2391"));
+	expected = ovl_add(expected, sdsnew("Rosalind_2391"), sdsnew("Rosalind_2323"));
+
+	observed = ovl_sort_insertion(observed);
+
+	ovl_List* diff = ovl_diff(expected, observed);
+
+	debug("difference between observed and expected");
+	ovl_debug_list(diff->head);
+
+	assert_int_equal(0, diff->size);
+}
+
+static void test_ovl_diff_left_bigger(void** state) {
+	ovl_List* observed = ovl_init();
+	observed = ovl_add(observed, sdsnew("Rosalind_0498"), sdsnew("Rosalind_0442"));
+	observed = ovl_add(observed, sdsnew("Rosalind_0498"), sdsnew("Rosalind_2391"));
+	observed = ovl_add(observed, sdsnew("Rosalind_2391"), sdsnew("Rosalind_2323"));
+	observed = ovl_add(observed, sdsnew("XXXRosalind_2391"), sdsnew("Rosalind_2323"));
+
+	ovl_List* expected = ovl_init();
+	expected = ovl_add(expected, sdsnew("Rosalind_0498"), sdsnew("Rosalind_0442"));
+	expected = ovl_add(expected, sdsnew("Rosalind_0498"), sdsnew("Rosalind_2391"));
+	expected = ovl_add(expected, sdsnew("Rosalind_2391"), sdsnew("Rosalind_2323"));
+
+	ovl_List* diff = ovl_diff(expected, observed);
+	assert_int_equal(1, diff->size);
+	assert_non_null(diff->head);
+	assert_non_null(diff->head->name1);
+	assert_string_equal(diff->head->name1, "XXXRosalind_2391");
+}
+
+static void test_ovl_diff_right_bigger(void** state) {
+	ovl_List* observed = ovl_init();
+	observed = ovl_add(observed, sdsnew("Rosalind_0498"), sdsnew("Rosalind_0442"));
+	observed = ovl_add(observed, sdsnew("Rosalind_0498"), sdsnew("Rosalind_2391"));
+	observed = ovl_add(observed, sdsnew("Rosalind_2391"), sdsnew("Rosalind_2323"));
+
+	ovl_List* expected = ovl_init();
+	expected = ovl_add(expected, sdsnew("Rosalind_0498"), sdsnew("Rosalind_0442"));
+	expected = ovl_add(expected, sdsnew("Rosalind_0498"), sdsnew("Rosalind_2391"));
+	expected = ovl_add(expected, sdsnew("Rosalind_2391"), sdsnew("Rosalind_2323"));
+	observed = ovl_add(observed, sdsnew("XXXRosalind_2391"), sdsnew("Rosalind_2323"));
+
+	ovl_List* diff = ovl_diff(expected, observed);
+	assert_int_equal(1, diff->size);
+	assert_non_null(diff->head);
+	assert_non_null(diff->head->name1);
+	assert_string_equal(diff->head->name1, "XXXRosalind_2391");
+}
+
+static void test_ovl_diff_middle_differences(void** state) {
+	ovl_List* observed = ovl_init();
+	observed = ovl_add(observed, sdsnew("Rosalind_0498"), sdsnew("Rosalind_0442"));
+	observed = ovl_add(observed, sdsnew("Rosalind_0498"), sdsnew("Rosalind_2391"));
+	observed = ovl_add(observed, sdsnew("Rosalind_2391"), sdsnew("Rosalind_2323"));
+
+	ovl_List* expected = ovl_init();
+	expected = ovl_add(expected, sdsnew("Rosalind_0498"), sdsnew("Rosalind_0442"));
+	expected = ovl_add(expected, sdsnew("Rosalind_0498"), sdsnew("Rosalind_xxxx"));
+	expected = ovl_add(expected, sdsnew("Rosalind_2391"), sdsnew("Rosalind_2323"));
+
+	ovl_List* diff = ovl_diff(expected, observed);
+	ovl_debug_list(diff->head);
+	assert_int_equal(2, diff->size);
+	assert_non_null(diff->head);
+	assert_non_null(diff->head->name1);
+	assert_string_equal(diff->head->name1, "Rosalind_0498");
 }
 
 static void test_grph_determine_if_adjacent_short_string1(void** state) {
@@ -100,6 +170,35 @@ static void test_ovl_List_add_simple_2(void** state) {
 	assert_string_equal(list->tail->prev->name1, "node2_name1");
 	assert_string_equal(list->tail->prev->prev->name1, "node1_name1");
 	assert_null(list->tail->prev->prev->prev);
+}
+
+/** given a three element list, confirm that appending a node:
+ *  - appends the node
+ *  - resets the list tail correctly
+ *  - sets node->next to NULL
+ */
+static void test_ovl_List_append_node_basic(void** state) {
+	ovl_List* list = ovl_init();
+
+	sds name1_1 = sdsnew("node1_name1");
+	sds name1_2 = sdsnew("node1_name2");
+	sds name2_1 = sdsnew("node2_name1");
+	sds name2_2 = sdsnew("node2_name2");
+	sds name3_1 = sdsnew("node3_name1");
+	sds name3_2 = sdsnew("node3_name2");
+
+	list = ovl_add(list, name1_1, name1_2);
+	list = ovl_add(list, name2_1, name2_2);
+	list = ovl_add(list, name3_1, name3_2);
+
+	ovl_Node to_add = {.name1 = sdsnew("node4_name1"), .name2 = sdsnew("node4_name2")};
+
+	list = ovl_append_node(list, &to_add);
+
+	assert_string_equal(list->head->next->next->next->name1, "node4_name1");
+	assert_null(list->head->next->next->next->next);
+
+	assert_string_equal(list->tail->prev->name1, "node3_name1");
 }
 
 /** given a simple 10 node list, confirm that insertion sort orders correctly */
@@ -193,7 +292,6 @@ static void test_ovl_node_cmp_same_name1(void** state) {
 
 int main(int argc, char* argv[]) {
 	const struct CMUnitTest tests[] = {
-		cmocka_unit_test(test_grph_basic), 
 		cmocka_unit_test(test_grph_determine_if_adjacent_short_string1),
 		cmocka_unit_test(test_grph_determine_if_adjacent_matching),
 		cmocka_unit_test(test_make_overlap_graph_basic),
@@ -203,6 +301,12 @@ int main(int argc, char* argv[]) {
 		cmocka_unit_test(test_ovl_node_cmp),
 		cmocka_unit_test(test_ovl_node_cmp_2),
 		cmocka_unit_test(test_ovl_node_cmp_same_name1),
+		cmocka_unit_test(test_ovl_List_append_node_basic),
+		cmocka_unit_test(test_grph_basic), 
+		cmocka_unit_test(test_ovl_diff_left_bigger),
+		cmocka_unit_test(test_ovl_diff_right_bigger),
+		cmocka_unit_test(test_ovl_diff_middle_differences),
+		
 	};
 	cmocka_run_group_tests_name("grph", tests, NULL, NULL);
 }

@@ -189,9 +189,11 @@ ovl_List* ovl_init(void);
  */
 ovl_List* ovl_add(ovl_List* nodes, sds name1, sds name2);
 
+ovl_List* ovl_append_node(ovl_List* list, ovl_Node* node);
+
 /**
- * Given two graph adjacency nodes sorted on name1 then name2, return a new linked list with the relationships that
- * are in nodes1 and not in nodes2. 
+ * Given two graph adjacency nodes sorted on name1 then name2, return a new
+ * linked list with the relationships that are in nodes1 and not in nodes2. 
  *
  */
 ovl_List* ovl_diff(ovl_List* nodes1, ovl_List* nodes2);

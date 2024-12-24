@@ -91,7 +91,6 @@ ovl_List* ovl_sort_insertion(ovl_List* list) {
 			while(current_sorted->next != NULL && ovl_node_cmp(current_sorted->next, curr) < 0) {
 				current_sorted = current_sorted->next;
 			}
-			ovl_debug_list(sorted);
 			debug(
 				"Going to insert curr '%s' after current_sorted '%s'",
 				ovl_node_sdsprintf(curr),
@@ -120,13 +119,13 @@ sds ovl_node_sdsprintf(ovl_Node* to_print) {
 
 void ovl_debug_list(ovl_Node* head) {
 	int counter = 0;
+	debug("head = %p", head);
 	while(head != NULL) {
 		debug("%d: %s %s", counter, head->name1, head->name2);
 		head = head->next;
 		counter++;
 	}
 }
-
 
 int ovl_node_cmp(ovl_Node* node1, ovl_Node* node2) {
 	int compare = strcmp(node1->name1, node2->name1);
@@ -144,8 +143,66 @@ int ovl_node_cmp(ovl_Node* node1, ovl_Node* node2) {
 	return compare;
 }
 
-ovl_List* ovl_diff(ovl_List* nodes1, ovl_List* nodes2) {
-	return nodes1;
+ovl_List* ovl_diff(ovl_List* list1, ovl_List* list2) {
+	if (list1 == NULL) return list1;
+	if (list2 == NULL) return list1;
+
+	ovl_List* diff = ovl_init();
+
+	ovl_Node* list1_index = list1->head;
+	ovl_Node* list2_index = list2->head;
+
+	while(true) {
+		if (list1_index == NULL && list2_index == NULL) {
+			break;
+		} else if (list1_index == NULL) {
+			diff = ovl_append_node(diff, list2_index);
+			list2_index = list2_index->next;
+		} else if (list2_index == NULL) {
+			diff = ovl_append_node(diff, list1_index);
+			list1_index = list1_index->next;
+		} else {
+
+			int compare = ovl_node_cmp(list1_index, list2_index);
+			if (0 == compare) {
+				/* nodes are the same, move to next nodes */
+				list1_index = list1_index->next;
+				list2_index = list2_index->next;
+			} else if (compare < 0) {
+				/* list1 node is smaller, add to new list and move to next list1,
+				 * leave list2 alone */
+				diff = ovl_append_node(diff, list1_index);
+				list1_index = list1_index->next;
+			} else {
+				/* list2 node is smaller, add to new list and move to next list2,
+				 * leave list1 alone */
+				diff = ovl_append_node(diff, list2_index);
+				list2_index = list2_index->next;
+			}
+		}
+	}
+	return diff;
+}
+
+ovl_List* ovl_append_node(ovl_List* list, ovl_Node* node) {
+	if (list == NULL) return list;
+	if (node == NULL) return list;
+
+	if (list->tail != NULL) {
+		list->tail->next = node;
+	}
+
+	if (list->head == NULL) {
+		list->head = node;
+	}
+
+	node->prev = list->tail;
+	node->next = NULL;
+
+	list->tail = node;
+	list->size++;
+
+	return list;
 
 }
 
