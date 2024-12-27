@@ -23,6 +23,7 @@ typedef enum {
 	subs,
 	orf,
 	grph,
+	mprt,
 } PROBLEM;
 
 const static struct {
@@ -41,6 +42,7 @@ const static struct {
 	{subs, "subs"},
 	{orf, "orf"},
 	{grph, "grph"},
+	{mprt, "mprt"},
 };
 
 
@@ -114,7 +116,6 @@ int main(int argc, char *argv[]) {
 
 	check(problem, "No problem specified");
 
-
 	if (dna == problem) {
 		sds input = sdsempty();
 		input = get_single_sds_line(stdin);
@@ -152,6 +153,8 @@ int main(int argc, char *argv[]) {
 		result = orf_rosalind_interface(stdin);
 	} else if (grph == problem) {
 		result = grph_rosalind_interface(stdin);
+	} else if (mprt == problem) {
+		result = mprt_rosalind_interface(stdin);
 	} else {
 		success = false;
 		goto error;

@@ -88,11 +88,8 @@ FastaStrings* FastaStrings_fromFile(FILE* stream) {
 	bool in_sequence = false;
 
 	sds sequence_buffer = sdsempty();
-	debug("sequencer_buffer size = %zu", sdslen(sequence_buffer));
 	sds name = sdsempty();
-	debug("name size = %zu", sdslen(name));
 	sds sequence = sdsempty();
-	debug("sequence size = %zu", sdslen(sequence));
 
 	while((lineSize = getline(&buffer, &bufsize, stream)) != -1) {
 		line_counter++;
@@ -116,14 +113,11 @@ FastaStrings* FastaStrings_fromFile(FILE* stream) {
 
 				sdsfree(sequence);
 				sequence = sdsempty();
-				debug("reset sequence to '%s'", sequence);
 
 				sdsfree(name);
 				name = sdsempty();
-				debug("reset name to '%s'", name);
 			}
 
-			debug("Going to set name");
 			name = sdscat(name, buffer);
 			sdstrim(name, " \n>");
 			debug("Set name to '%s'", name);
