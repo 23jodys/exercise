@@ -277,3 +277,31 @@ void ovl_debug_list(ovl_Node* head);
  *  - all sds strings referenced
  */
 void ovl_free(ovl_List** nodes);
+
+/* mprt */
+typedef struct mprt_ResultList {
+	struct mprt_ResultNode* head;
+	struct mprt_ResultNode* tail;
+	int size;
+} mprt_ResultList;
+
+typedef struct mprt_ResultNode {
+	struct mprt_ResultNode* next;
+	struct mprt_ResultNode* prev;
+	int value;
+	sds matched;
+} mprt_ResultNode;
+
+typedef struct mprt_Motif {
+	sds protein_motif;
+	sds regex;
+} mprt_Motif;
+
+sds mprt_rosalind_interface(FILE* stream);
+sds mprt_list_sprint(mprt_ResultList* list);
+sds mprt_protein_sequence_fetch(sds protein_id);
+mprt_ResultList* mprt_result_list_init(void);
+mprt_ResultList* mprt_result_list_add(mprt_ResultList* list, int value, sds matched); 
+void mprt_result_list_free(mprt_ResultList** to_free); 
+mprt_ResultList* mprt_regex_match(sds regex, sds protein_sequence, mprt_ResultList* result);
+mprt_ResultList* mprt_motif_find(sds protein_sequence, sds regex, mprt_ResultList* result);
